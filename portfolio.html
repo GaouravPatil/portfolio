@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gaourav Patil — gaourav.dev</title>
+    <meta name="description" content="Gaourav Patil — Aspiring Cloud & DevOps Engineer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --bg3: #21262d;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --bright: #e6edf3;
+            --muted: #8b949e;
+            --blue: #58a6ff;
+            --green: #3fb950;
+            --purple: #bc8cff;
+            --orange: #f0883e;
+            --yellow: #d29922;
+            --red: #f85149;
+            --font: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #010409;
+            font-family: var(--font);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg);
+        }
+
+        #topbar {
+            flex-shrink: 0;
+            background: var(--bg3);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-red {
+            background: #ff5f57;
+        }
+
+        .dot-yellow {
+            background: #febc2e;
+        }
+
+        .dot-green {
+            background: #28c840;
+        }
+
+        #url-pill {
+            flex: 1;
+            max-width: 380px;
+            margin: 0 auto;
+            background: #010409;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        #url-pill .lock {
+            color: var(--green);
+            font-size: 11px;
+        }
+
+        #url-pill .domain {
+            color: var(--bright);
+            letter-spacing: 0.03em;
+        }
+
+        #clock {
+            font-size: 11px;
+            color: var(--blue);
+            white-space: nowrap;
+            margin-left: auto;
+        }
+
+        #tabbar {
+            flex-shrink: 0;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            height: 32px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .tab {
+            padding: 4px 16px;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            color: var(--muted);
+            background: transparent;
+            font-family: var(--font);
+            font-size: 11px;
+            cursor: default;
+        }
+
+        .tab.active {
+            background: var(--bg);
+            border-color: var(--border);
+            color: var(--bright);
+        }
+
+        #terminal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 28px 16px;
+            scroll-behavior: smooth;
+            cursor: text;
+        }
+
+        #terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #terminal-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #terminal-body::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .line {
+            font-size: 13px;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+        }
+
+        .line.muted {
+            color: var(--muted);
+        }
+
+        .line.bold {
+            color: var(--bright);
+            font-weight: 500;
+        }
+
+        .line.success {
+            color: var(--green);
+        }
+
+        .line.warning {
+            color: var(--yellow);
+        }
+
+        .line.error {
+            color: var(--red);
+        }
+
+        .line.accent {
+            color: var(--purple);
+        }
+
+        .line.sec {
+            color: var(--green);
+            font-weight: 500;
+            margin: 6px 0 2px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #1c2128;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 8px;
+            font-size: 11px;
+            margin: 2px 2px;
+            font-family: var(--font);
+            color: var(--muted);
+        }
+
+        .tag.blue {
+            border-color: #1f6feb;
+            color: var(--blue);
+        }
+
+        .tag.green {
+            border-color: #238636;
+            color: var(--green);
+        }
+
+        .tag.purple {
+            border-color: #6e40c9;
+            color: var(--purple);
+        }
+
+        .tag.orange {
+            border-color: #b45309;
+            color: var(--orange);
+        }
+
+        .typing-cursor::after {
+            content: '▋';
+            color: var(--blue);
+            animation: blink 0.7s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .resume-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 6px;
+            padding: 6px 18px;
+            text-decoration: none;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-top: 4px;
+            transition: opacity 0.2s;
+        }
+
+        .resume-btn:hover {
+            opacity: 0.8;
+        }
+
+        .resume-btn.green {
+            background: #1c2128;
+            border: 1px solid #238636;
+            color: var(--green);
+        }
+
+        .resume-btn.blue {
+            background: #1c2128;
+            border: 1px solid #1f6feb;
+            color: var(--blue);
+        }
+
+        #input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        #prompt-label {
+            color: var(--blue);
+            font-size: 13px;
+            white-space: nowrap;
+            user-select: none;
+            line-height: 1.75;
+        }
+
+        #cmd-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 13px;
+            line-height: 1.75;
+            caret-color: var(--blue);
+        }
+
+        #cmd-input::placeholder {
+            color: var(--border);
+        }
+
+        #cmd-input:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        #statusbar {
+            flex-shrink: 0;
+            background: #0a3069;
+            border-top: 1px solid #1f6feb;
+            padding: 0 16px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #cae8ff;
+        }
+
+        .s-left,
+        .s-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .s-pill {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            padding: 0 6px;
+            font-size: 10px;
+        }
+
+        .s-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            display: inline-block;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="topbar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <div id="url-pill">
+                <span class="lock">🔒</span>
+                <span class="domain">gaourav.dev</span>
+            </div>
+            <div id="clock">00:00:00</div>
+        </div>
+
+        <div id="tabbar">
+            <div class="tab active">~/portfolio — bash</div>
+            <div class="tab" style="opacity:0.35">+</div>
+        </div>
+
+        <div id="terminal-body">
+            <div id="output"></div>
+            <div id="input-row">
+                <span id="prompt-label">visitor@gaourav.dev:~$</span>
+                <input id="cmd-input" type="text" autocomplete="off" spellcheck="false" autofocus
+                    placeholder="type 'help' and press Enter..." />
+            </div>
+        </div>
+
+        <div id="statusbar">
+            <div class="s-left">
+                <span><span class="s-dot"></span>DAEMON v1.0.0</span>
+                <span class="s-pill">Cloud &amp; DevOps</span>
+                <span class="s-pill">RHCSA</span>
+                <span class="s-pill">MIT-WPU</span>
+            </div>
+            <div class="s-right">
+                <span>Gaourav Patil Portfolio OS</span>
+                <span id="status-cmd" class="s-pill">ready</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const termBody = document.getElementById('terminal-body');
+        const out = document.getElementById('output');
+        const inp = document.getElementById('cmd-input');
+        const statusCmd = document.getElementById('status-cmd');
+
+        const CHAR_DELAY = 16;
+        const LINE_DELAY = 28;
+        const TAG_DELAY = 85;
+
+        let isTyping = false;
+        const cmdHistory = [];
+        let histIdx = -1;
+
+        const RESUME_PDF = 'GaouravPatil - Resume (2).pdf';
+
+        /* ── Command definitions ─────────────────────────────── */
+        const commands = {
+
+            help: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Available Commands' },
+                { t: 'line', c: 'muted', v: '  whoami      — Who am I?' },
+                { t: 'line', c: 'muted', v: '  about       — About me' },
+                { t: 'line', c: 'muted', v: '  skills      — Technical skills' },
+                { t: 'line', c: 'muted', v: '  experience  — Work experience' },
+                { t: 'line', c: 'muted', v: '  projects    — My projects' },
+                { t: 'line', c: 'muted', v: '  education   — Education & certifications' },
+                { t: 'line', c: 'muted', v: '  contact     — Get in touch' },
+                { t: 'line', c: 'muted', v: '  resume      — View / download my resume' },
+                { t: 'line', c: 'muted', v: '  banner      — Show welcome banner' },
+                { t: 'line', c: 'muted', v: '  clear       — Clear terminal' },
+                { t: 'empty' },
+                { t: 'line', c: 'warning', v: '  Tip: Type a command and press Enter ↵' },
+                { t: 'line', c: 'muted', v: '  Use ↑ ↓ arrow keys to navigate history.' },
+                { t: 'empty' },
+            ],
+
+            whoami: () => [
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Gaourav Patil' },
+                { t: 'line', c: 'accent', v: '  Where CI/CD Meets AI — Cloud & DevOps Engineer' },
+                { t: 'line', c: 'muted', v: '  📍 Pune, Maharashtra, India' },
+                { t: 'line', c: 'success', v: '  🌐 gaourav.dev' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  "Automate everything. Break nothing. Ship faster."' },
+                { t: 'empty' },
+            ],
+
+            about: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'About Me' },
+                { t: 'line', c: '', v: "  Hey! I'm Gaourav Patil — RHCSA-certified Cloud & DevOps Engineer" },
+                { t: 'line', c: '', v: '  with hands-on experience in AWS Cloud, Linux systems, and AI tools.' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  I am driven by a passion for creating smart, automation-focused' },
+                { t: 'line', c: '', v: '  solutions — from CI/CD pipelines to AI-powered internal tools like' },
+                { t: 'line', c: '', v: '  intelligent support chatbots that enhance IT operations.' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  Currently pursuing MCA at MIT-WPU Pune, specializing in' },
+                { t: 'line', c: '', v: '  Cloud Computing, DevOps, and Artificial Intelligence.' },
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  > Run "skills" to see what I work with.' },
+                { t: 'empty' },
+            ],
+
+            experience: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Work Experience' },
+                { t: 'line', c: 'bold', v: '  AWS Cloud Intern' },
+                { t: 'line', c: 'accent', v: '  F13 Technologies Pvt Ltd · Remote, Delhi' },
+                { t: 'line', c: 'muted', v: '  Jun 2025 – Aug 2025' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  • Deployed and managed cloud infrastructure on AWS EC2,' },
+                { t: 'line', c: '', v: '    configuring VPC networking for secure, scalable AI/ML workloads.' },
+                { t: 'line', c: '', v: '  • Automated routine cloud operations using AWS Lambda,' },
+                { t: 'line', c: '', v: '    accelerating iteration cycles for AI model deployment pipelines.' },
+                { t: 'line', c: '', v: '  • Managed data storage with S3 and RDS/DynamoDB, structuring' },
+                { t: 'line', c: '', v: '    data pipelines for efficient ingestion of AI-ready datasets.' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Tech: EC2 · VPC · S3 · EBS · RDS · DynamoDB · Lambda · Shield' },
+                { t: 'empty' },
+            ],
+
+            skills: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Technical Skills' },
+                { t: 'line', c: 'success', v: '  Programming Languages' },
+                { t: 'tags', v: ['C++', 'Java', 'Go', 'Python'], color: '' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Frameworks & Libraries' },
+                { t: 'tags', v: ['React.js', 'Express', 'Flask', 'Spring Boot'], color: 'blue' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Cloud & DevOps' },
+                { t: 'tags', v: ['AWS', 'GCP', 'Docker', 'Kubernetes', 'Jenkins', 'Linux', 'GitHub', 'CI/CD', 'Nginx'], color: 'purple' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Databases' },
+                { t: 'tags', v: ['PostgreSQL', 'MongoDB', 'Redis'], color: 'orange' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Tools' },
+                { t: 'tags', v: ['Git', 'Postman', 'Eureka', 'AWS SNS'], color: 'blue' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Soft Skills' },
+                { t: 'tags', v: ['Leadership', 'Problem Solving', 'Critical Thinking'], color: '' },
+                { t: 'empty' },
+            ],
+
+            projects: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Projects' },
+
+                { t: 'line', c: 'bold', v: '  AnnaData 🌾  [Lead Developer]' },
+                { t: 'line', c: 'muted', v: '  AI-Powered Farmer Intelligence Platform · Present' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  • Engineered a full-stack platform using GrokAI,' },
+                { t: 'line', c: '', v: '    Weather API and Location API for real-time agronomic data.' },
+                { t: 'line', c: '', v: '  • Executed RESTful API orchestration with async middleware.' },
+                { t: 'line', c: '', v: '  • Delivered commodity telemetry & subsidy procurement' },
+                { t: 'line', c: '', v: '    pathways for rural stakeholders.' },
+                { t: 'empty' },
+                { t: 'tags', v: ['Node.js', 'Express', 'Python', 'PostgreSQL', 'GrokAI', 'React.js'], color: 'green' },
+                { t: 'empty' },
+
+                { t: 'line', c: 'bold', v: '  Fitness MicroService 🏋️  [Individual]' },
+                { t: 'line', c: 'muted', v: '  Distributed Microservices App · Dec 2025 – Present' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  • Built a distributed fitness app using microservices arch.' },
+                { t: 'line', c: '', v: '  • Independent domains: auth, workout, diet, activity, notifications.' },
+                { t: 'line', c: '', v: '  • Service interaction via REST APIs and messaging queues.' },
+                { t: 'empty' },
+                { t: 'tags', v: ['Java', 'Spring Boot', 'Eureka', 'Nginx', 'OpenAI', 'AWS SNS', 'PostgreSQL'], color: 'purple' },
+                { t: 'empty' },
+            ],
+
+            education: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Education' },
+                { t: 'line', c: 'bold', v: '  Master of Computer Applications (MCA)' },
+                { t: 'line', c: 'accent', v: '  MIT World Peace University, Pune' },
+                { t: 'line', c: 'muted', v: '  Jul 2025 – Present  ·  CGPA: 7.32' },
+                { t: 'line', c: '', v: '  Coursework: DSA · Java Web & Network Programming' },
+                { t: 'line', c: '', v: '  Probability & Statistics · Cloud Computing' },
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Bachelor of Computer Applications (BCA)' },
+                { t: 'line', c: 'accent', v: '  Latur' },
+                { t: 'line', c: 'muted', v: '  Completed' },
+                { t: 'empty' },
+                { t: 'sec', v: 'Certifications' },
+                { t: 'line', c: 'success', v: '  ✓ Red Hat Certified System Administrator (RHCSA)' },
+                { t: 'line', c: 'success', v: '  ✓ Basics of Kubernetes — The Linux Foundation / Linux Academy' },
+                { t: 'empty' },
+            ],
+
+            contact: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Contact' },
+                { t: 'line', c: 'bold', v: '  Phone     : 9834892067' },
+                { t: 'line', c: 'bold', v: '  Email     : patilgaourav304@gmail.com' },
+                { t: 'line', c: 'success', v: '  LinkedIn  : linkedin.com/in/gaourav-patil-885695272' },
+                { t: 'line', c: 'accent', v: '  Web       : gaourav.dev' },
+                { t: 'empty' },
+                { t: 'line', c: 'accent', v: "  I'm open to internships, collaborations & opportunities!" },
+                { t: 'line', c: 'muted', v: "  Don't hesitate to reach out. Let's build something great." },
+                { t: 'empty' },
+            ],
+
+            resume: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Resume — Gaourav Patil' },
+                { t: 'line', c: 'bold', v: '  Gaourav Patil — Cloud & DevOps Engineer' },
+                { t: 'line', c: 'muted', v: '  "Where CI/CD Meets AI: An AI Cloud Engineer Stepping into' },
+                { t: 'line', c: 'muted', v: '   Intelligent Automation"' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  ✓ RHCSA Certified — Red Hat System Administrator' },
+                { t: 'line', c: 'success', v: '  ✓ AWS Cloud Intern — F13 Technologies Pvt Ltd' },
+                { t: 'line', c: 'success', v: '  ✓ Projects — AnnaData · Fitness MicroService' },
+                { t: 'line', c: 'success', v: '  ✓ MCA — MIT World Peace University, Pune' },
+                { t: 'empty' },
+                { t: 'line', c: 'accent', v: '  Choose an option below:' },
+                { t: 'empty' },
+                { t: 'resumelink' },
+                { t: 'empty' },
+            ],
+
+            banner: () => [
+                {
+                    t: 'raw', v: `<pre style="color:#3fb950;font-size:11px;line-height:1.35;font-family:'JetBrains Mono',monospace;"> ██████╗  █████╗  ██████╗ ██╗   ██╗██████╗  █████╗ ██╗   ██╗
+██╔════╝ ██╔══██╗██╔═══██╗██║   ██║██╔══██╗██╔══██╗██║   ██║
+██║  ███╗███████║██║   ██║██║   ██║██████╔╝███████║██║   ██║
+██║   ██║██╔══██║██║   ██║██║   ██║██╔══██╗██╔══██║╚██╗ ██╔╝
+╚██████╔╝██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║ ╚████╔╝
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝</pre>`},
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Gaourav Patil — Cloud & DevOps Engineer' },
+                { t: 'line', c: 'success', v: '  🌐 gaourav.dev' },
+                { t: 'line', c: 'muted', v: '  MIT-WPU Pune  |  RHCSA Certified  |  Cloud · DevOps · AI' },
+                { t: 'line', c: 'accent', v: '  "Automate everything. Break nothing. Ship faster."' },
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  Type "help" to explore my portfolio.' },
+                { t: 'empty' },
+            ],
+
+            clear: () => null,
+        };
+
+        /* ── Helpers ─────────────────────────────────────────── */
+        function scrollToBottom() { termBody.scrollTop = termBody.scrollHeight; }
+        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        /* ── Resume button element ───────────────────────────── */
+        function makeResumeLinkEl() {
+            const d = document.createElement('div');
+            d.className = 'line';
+            d.style.paddingLeft = '16px';
+
+            const dl = document.createElement('a');
+            dl.href = RESUME_PDF;
+            dl.download = 'GaouravPatil - Resume (2).pdf';
+            dl.className = 'resume-btn green';
+            dl.textContent = '⬇  Download Resume (PDF)';
+
+            const view = document.createElement('a');
+            view.href = RESUME_PDF;
+            view.target = '_blank';
+            view.rel = 'noopener';
+            view.className = 'resume-btn blue';
+            view.textContent = '👁  View Resume';
+
+            d.appendChild(dl);
+            d.appendChild(view);
+            return d;
+        }
+
+        /* ── Instant renderer ────────────────────────────────── */
+        function renderInstant(item) {
+            if (item.t === 'empty') {
+                const d = document.createElement('div');
+                d.className = 'line'; d.innerHTML = '&nbsp;';
+                out.appendChild(d); return;
+            }
+            if (item.t === 'sec') {
+                const d = document.createElement('div');
+                d.className = 'line sec';
+                d.textContent = `  ── ${item.v} ──`;
+                out.appendChild(d); return;
+            }
+            if (item.t === 'tags') {
+                const d = document.createElement('div');
+                d.className = 'line'; d.style.paddingLeft = '16px';
+                const cls = item.color || '';
+                d.innerHTML = item.v.map(t => `<span class="tag ${cls}">${t}</span>`).join('');
+                out.appendChild(d); return;
+            }
+            if (item.t === 'raw') {
+                const d = document.createElement('div');
+                d.className = 'line'; d.innerHTML = item.v;
+                out.appendChild(d); return;
+            }
+            if (item.t === 'resumelink') {
+                out.appendChild(makeResumeLinkEl()); return;
+            }
+            const d = document.createElement('div');
+            d.className = `line ${item.c || ''}`;
+            d.textContent = item.v || '';
+            out.appendChild(d);
+        }
+
+        /* ── Typewriter renderer ─────────────────────────────── */
+        function typewriterItem(item) {
+            return new Promise(async resolve => {
+
+                if (item.t === 'empty') {
+                    const d = document.createElement('div');
+                    d.className = 'line'; d.innerHTML = '&nbsp;';
+                    out.appendChild(d); scrollToBottom(); return resolve();
+                }
+
+                if (item.t === 'raw') {
+                    const d = document.createElement('div');
+                    d.className = 'line'; d.innerHTML = item.v;
+                    out.appendChild(d); scrollToBottom(); return resolve();
+                }
+
+                if (item.t === 'resumelink') {
+                    out.appendChild(makeResumeLinkEl());
+                    scrollToBottom(); return resolve();
+                }
+
+                if (item.t === 'sec') {
+                    const text = `  ── ${item.v} ──`;
+                    const d = document.createElement('div');
+                    d.className = 'line sec typing-cursor';
+                    out.appendChild(d);
+                    await typeChars(d, text);
+                    d.classList.remove('typing-cursor');
+                    scrollToBottom(); return resolve();
+                }
+
+                if (item.t === 'tags') {
+                    const d = document.createElement('div');
+                    d.className = 'line'; d.style.paddingLeft = '16px';
+                    out.appendChild(d);
+                    const cls = item.color || '';
+                    for (const tagText of item.v) {
+                        const span = document.createElement('span');
+                        span.className = `tag ${cls}`;
+                        span.textContent = tagText;
+                        d.appendChild(span);
+                        scrollToBottom();
+                        await delay(TAG_DELAY);
+                    }
+                    return resolve();
+                }
+
+                const d = document.createElement('div');
+                d.className = `line ${item.c || ''} typing-cursor`;
+                out.appendChild(d);
+                await typeChars(d, item.v || '');
+                d.classList.remove('typing-cursor');
+                scrollToBottom();
+                resolve();
+            });
+        }
+
+        function typeChars(el, text) {
+            return new Promise(resolve => {
+                let i = 0;
+                function next() {
+                    if (i >= text.length) return resolve();
+                    el.textContent += text[i++];
+                    scrollToBottom();
+                    setTimeout(next, CHAR_DELAY);
+                }
+                next();
+            });
+        }
+
+        async function animateItems(items) {
+            for (const item of items) {
+                await typewriterItem(item);
+                await delay(LINE_DELAY);
+            }
+        }
+
+        function printPrompt(cmd) {
+            const d = document.createElement('div');
+            d.className = 'line';
+            d.innerHTML = `<span style="color:#58a6ff;">visitor@gaourav.dev:~$</span> <span style="color:#c9d1d9;">${cmd}</span>`;
+            out.appendChild(d);
+        }
+
+        /* ── Run ─────────────────────────────────────────────── */
+        async function run(cmd, instant = false) {
+            cmd = cmd.trim();
+            if (!cmd || isTyping) return;
+
+            const key = cmd.toLowerCase();
+            if (!instant) printPrompt(cmd);
+            statusCmd.textContent = key;
+
+            if (key === 'clear') { out.innerHTML = ''; scrollToBottom(); return; }
+
+            const fn = commands[key];
+            if (!fn) {
+                isTyping = true; inp.disabled = true;
+                const d = document.createElement('div');
+                d.className = 'line error typing-cursor';
+                out.appendChild(d);
+                await typeChars(d, `  bash: command not found: ${cmd}. Try 'help'.`);
+                d.classList.remove('typing-cursor');
+                inp.disabled = false; inp.focus(); isTyping = false;
+                scrollToBottom(); return;
+            }
+
+            const items = fn();
+            if (!items) return;
+
+            if (instant) {
+                items.forEach(renderInstant);
+                scrollToBottom();
+            } else {
+                isTyping = true; inp.disabled = true;
+                await animateItems(items);
+                inp.disabled = false; inp.focus(); isTyping = false;
+                scrollToBottom();
+            }
+        }
+
+        /* ── Input ───────────────────────────────────────────── */
+        inp.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                if (isTyping) return;
+                const val = inp.value.trim();
+                if (val) { cmdHistory.unshift(val); histIdx = -1; }
+                inp.value = ''; run(val);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (histIdx < cmdHistory.length - 1) { histIdx++; inp.value = cmdHistory[histIdx]; }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (histIdx > 0) { histIdx--; inp.value = cmdHistory[histIdx]; }
+                else { histIdx = -1; inp.value = ''; }
+            }
+        });
+
+        termBody.addEventListener('click', () => { if (!isTyping) inp.focus(); });
+
+        /* ── Clock ───────────────────────────────────────────── */
+        function updateClock() {
+            document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        /* ── Boot ────────────────────────────────────────────── */
+        run('banner', true);
+        scrollToBottom();
+        inp.focus();
+    </script>
+</body>
+
+</html>
