@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gaourav Patil — Cloud &amp; DevOps Engineer | gaourav.dev</title>
+    <meta name="description"
+        content="Gaourav Patil — RHCSA-certified Cloud &amp; DevOps Engineer. AWS, Kubernetes, CI/CD, Linux, Python." />
+    <meta name="author" content="Gaourav Patil" />
+    <meta name="theme-color" content="#0d1117" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --bg3: #21262d;
+            --bg4: #1c2128;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --bright: #e6edf3;
+            --muted: #8b949e;
+            --blue: #58a6ff;
+            --green: #3fb950;
+            --purple: #bc8cff;
+            --orange: #f0883e;
+            --yellow: #d29922;
+            --red: #f85149;
+            --cyan: #39c5cf;
+            --font: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #010409;
+            font-family: var(--font);
+        }
+
+        /* ── Ambient: slow drifting cluster glow ───────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -30%;
+            background:
+                radial-gradient(38% 38% at 22% 28%, rgba(31, 111, 235, 0.14), transparent 70%),
+                radial-gradient(34% 34% at 78% 72%, rgba(63, 185, 80, 0.10), transparent 70%),
+                radial-gradient(30% 30% at 60% 15%, rgba(188, 140, 255, 0.07), transparent 70%);
+            animation: drift 34s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translate3d(-3%, -2%, 0) scale(1);
+            }
+
+            50% {
+                transform: translate3d(3%, 2%, 0) scale(1.08);
+            }
+
+            100% {
+                transform: translate3d(-2%, 3%, 0) scale(1.02);
+            }
+        }
+
+        /* ── Ambient: CRT scanlines + vignette ─────────────── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.045) 2px, rgba(0, 0, 0, 0.045) 4px),
+                radial-gradient(110% 110% at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.42) 100%);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        #app {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: rgba(13, 17, 23, 0.94);
+        }
+
+        /* ── Browser chrome ────────────────────────────────── */
+        #topbar {
+            flex-shrink: 0;
+            background: var(--bg3);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-red {
+            background: #ff5f57;
+        }
+
+        .dot-yellow {
+            background: #febc2e;
+        }
+
+        .dot-green {
+            background: #28c840;
+        }
+
+        #url-pill {
+            flex: 1;
+            max-width: 380px;
+            margin: 0 auto;
+            background: #010409;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        #url-pill .lock {
+            color: var(--green);
+            font-size: 11px;
+        }
+
+        #url-pill .domain {
+            color: var(--bright);
+            letter-spacing: 0.03em;
+        }
+
+        #clock {
+            font-size: 11px;
+            color: var(--blue);
+            white-space: nowrap;
+            margin-left: auto;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #tabbar {
+            flex-shrink: 0;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            height: 32px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .tab {
+            padding: 4px 16px;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            color: var(--muted);
+            background: transparent;
+            font-family: var(--font);
+            font-size: 11px;
+            cursor: default;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background: rgba(13, 17, 23, 0.9);
+            border-color: var(--border);
+            color: var(--bright);
+        }
+
+        /* ── Main split: terminal + ops sidebar ────────────── */
+        #main {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+        }
+
+        #terminal-body {
+            flex: 1;
+            min-width: 0;
+            overflow-y: auto;
+            padding: 16px 24px 20px;
+            scroll-behavior: smooth;
+            cursor: text;
+        }
+
+        #terminal-body::-webkit-scrollbar,
+        #sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #terminal-body::-webkit-scrollbar-track,
+        #sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #terminal-body::-webkit-scrollbar-thumb,
+        #sidebar::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        #sidebar {
+            flex-shrink: 0;
+            width: 320px;
+            border-left: 1px solid var(--border);
+            background: rgba(22, 27, 34, 0.55);
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #sidebar.live {
+            opacity: 1;
+        }
+
+        /* ── Sidebar panels ────────────────────────────────── */
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(13, 17, 23, 0.7);
+            overflow: hidden;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: var(--bg3);
+            border-bottom: 1px solid var(--border);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .panel-head .badge {
+            margin-left: auto;
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            color: var(--green);
+            background: rgba(63, 185, 80, 0.12);
+            border-radius: 3px;
+            padding: 0 5px;
+            text-transform: none;
+        }
+
+        .panel-body {
+            padding: 9px 10px;
+        }
+
+        /* ── Live pulsing status dot ───────────────────────── */
+        .pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0;
+            box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.6);
+            animation: pulse 2.4s ease-out infinite;
+        }
+
+        .pulse.warn {
+            background: var(--yellow);
+            animation: none;
+        }
+
+        .pulse.crash {
+            background: var(--red);
+            animation: pulse-fast 1s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            70% {
+                box-shadow: 0 0 0 7px rgba(63, 185, 80, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(63, 185, 80, 0);
+            }
+        }
+
+        @keyframes pulse-fast {
+            0% {
+                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(248, 81, 73, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0);
+            }
+        }
+
+        /* ── Sidebar pod list ──────────────────────────────── */
+        .pod-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 3px 4px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--text);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .pod-row:hover {
+            background: var(--bg4);
+            color: var(--bright);
+        }
+
+        .pod-row .pname {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pod-row .pstat {
+            margin-left: auto;
+            font-size: 9px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        /* ── Metric rows w/ sparkline ──────────────────────── */
+        .metric {
+            margin-bottom: 9px;
+        }
+
+        .metric:last-child {
+            margin-bottom: 0;
+        }
+
+        .metric-top {
+            display: flex;
+            align-items: baseline;
+            font-size: 10px;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .metric-top .mval {
+            margin-left: auto;
+            color: var(--bright);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .spark {
+            display: block;
+            width: 100%;
+            height: 26px;
+        }
+
+        .meter {
+            height: 4px;
+            border-radius: 2px;
+            background: var(--bg3);
+            overflow: hidden;
+            margin-top: 3px;
+        }
+
+        .meter i {
+            display: block;
+            height: 100%;
+            background: var(--blue);
+            border-radius: 2px;
+            transition: width 0.9s ease, background 0.9s ease;
+        }
+
+        /* ── Pipeline widget ───────────────────────────────── */
+        .stage {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--muted);
+            padding: 2px 0;
+        }
+
+        .stage .sicon {
+            width: 15px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .stage .sdur {
+            margin-left: auto;
+            font-size: 9px;
+            opacity: 0.7;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stage.done {
+            color: var(--green);
+        }
+
+        .stage.active {
+            color: var(--yellow);
+        }
+
+        .stage.active .sicon {
+            animation: spinpulse 1s linear infinite;
+        }
+
+        .stage.queued {
+            opacity: 0.45;
+        }
+
+        @keyframes spinpulse {
+            50% {
+                opacity: 0.35;
+            }
+        }
+
+        .rail {
+            height: 3px;
+            border-radius: 2px;
+            background: var(--bg3);
+            margin: 7px 0 3px;
+            overflow: hidden;
+        }
+
+        .rail i {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--green), var(--cyan));
+            transition: width 0.5s linear;
+        }
+
+        /* ── Terminal text ─────────────────────────────────── */
+        .line {
+            font-size: 13px;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+        }
+
+        .line.muted {
+            color: var(--muted);
+        }
+
+        .line.bold {
+            color: var(--bright);
+            font-weight: 500;
+            text-shadow: 0 0 14px rgba(230, 237, 243, 0.18);
+        }
+
+        .line.success {
+            color: var(--green);
+        }
+
+        .line.warning {
+            color: var(--yellow);
+        }
+
+        .line.error {
+            color: var(--red);
+        }
+
+        .line.accent {
+            color: var(--purple);
+        }
+
+        .line.cyan {
+            color: var(--cyan);
+        }
+
+        .line.sec {
+            color: var(--green);
+            font-weight: 500;
+            margin: 6px 0 2px;
+            text-shadow: 0 0 16px rgba(63, 185, 80, 0.28);
+        }
+
+        /* ── Boot log lines ────────────────────────────────── */
+        .boot {
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--muted);
+            white-space: pre-wrap;
+            animation: bootin 0.24s ease-out;
+        }
+
+        @keyframes bootin {
+            from {
+                opacity: 0;
+                transform: translateY(-2px);
+            }
+        }
+
+        .boot .ok {
+            color: var(--green);
+        }
+
+        .boot .warn {
+            color: var(--yellow);
+        }
+
+        .boot .info {
+            color: var(--blue);
+        }
+
+        .boot .msg {
+            color: var(--text);
+        }
+
+        /* ── Tags ──────────────────────────────────────────── */
+        .tag {
+            display: inline-block;
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 8px;
+            font-size: 11px;
+            margin: 2px 2px;
+            font-family: var(--font);
+            color: var(--muted);
+            animation: tagin 0.22s ease-out;
+        }
+
+        @keyframes tagin {
+            from {
+                opacity: 0;
+                transform: translateY(3px);
+            }
+        }
+
+        .tag.blue {
+            border-color: #1f6feb;
+            color: var(--blue);
+        }
+
+        .tag.green {
+            border-color: #238636;
+            color: var(--green);
+        }
+
+        .tag.purple {
+            border-color: #6e40c9;
+            color: var(--purple);
+        }
+
+        .tag.orange {
+            border-color: #b45309;
+            color: var(--orange);
+        }
+
+        /* ── kubectl-style table ───────────────────────────── */
+        .ktable {
+            font-size: 11.5px;
+            line-height: 1.85;
+            margin: 2px 0 2px 16px;
+            border-collapse: collapse;
+            animation: bootin 0.3s ease-out;
+        }
+
+        .ktable th {
+            text-align: left;
+            font-weight: 400;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            padding-right: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ktable td {
+            padding-right: 20px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .ktable tbody tr {
+            cursor: pointer;
+        }
+
+        .ktable tbody tr:hover td {
+            color: var(--bright);
+            background: rgba(88, 166, 255, 0.06);
+        }
+
+        .ktable .st-run {
+            color: var(--green);
+        }
+
+        .ktable .st-pend {
+            color: var(--yellow);
+        }
+
+        .ktable .st-crash {
+            color: var(--red);
+        }
+
+        /* ── Inline pipeline (terminal) ────────────────────── */
+        .pipe-inline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 4px 0 4px 16px;
+            font-size: 12px;
+        }
+
+        .pipe-inline .pstage {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 10px;
+            color: var(--muted);
+            background: var(--bg4);
+        }
+
+        .pipe-inline .pstage.ok {
+            border-color: #238636;
+            color: var(--green);
+        }
+
+        .pipe-inline .arrow {
+            color: var(--border);
+        }
+
+        /* ── Links / buttons ───────────────────────────────── */
+        a.tlink {
+            color: var(--blue);
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(88, 166, 255, 0.4);
+        }
+
+        a.tlink:hover {
+            color: var(--bright);
+            border-bottom-color: var(--bright);
+        }
+
+        .resume-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 6px;
+            padding: 6px 18px;
+            text-decoration: none;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-top: 4px;
+            transition: opacity 0.2s, box-shadow 0.2s;
+        }
+
+        .resume-btn:hover {
+            opacity: 0.85;
+            box-shadow: 0 0 18px rgba(88, 166, 255, 0.18);
+        }
+
+        .resume-btn.green {
+            background: var(--bg4);
+            border: 1px solid #238636;
+            color: var(--green);
+        }
+
+        .resume-btn.blue {
+            background: var(--bg4);
+            border: 1px solid #1f6feb;
+            color: var(--blue);
+        }
+
+        /* ── Input row ─────────────────────────────────────── */
+        .typing-cursor::after {
+            content: '▋';
+            color: var(--blue);
+            animation: blink 0.7s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        #input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        #prompt-label {
+            color: var(--blue);
+            font-size: 13px;
+            white-space: nowrap;
+            user-select: none;
+            line-height: 1.75;
+        }
+
+        #prompt-label .ctx {
+            color: var(--purple);
+        }
+
+        #cmd-input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 13px;
+            line-height: 1.75;
+            caret-color: var(--blue);
+        }
+
+        #cmd-input::placeholder {
+            color: var(--muted);
+            opacity: 0.75;
+        }
+
+        #cmd-input:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        /* ── Status bar ────────────────────────────────────── */
+        #statusbar {
+            flex-shrink: 0;
+            background: #0a3069;
+            border-top: 1px solid #1f6feb;
+            padding: 0 16px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #cae8ff;
+            gap: 10px;
+        }
+
+        .s-left,
+        .s-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .s-pill {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            padding: 0 6px;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .s-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        #ascii {
+            color: var(--green);
+            font-size: 11px;
+            line-height: 1.35;
+            text-shadow: 0 0 20px rgba(63, 185, 80, 0.35);
+            overflow: hidden;
+        }
+
+        /* ── Responsive ────────────────────────────────────── */
+        @media (max-width: 1000px) {
+            #sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 620px) {
+            #terminal-body {
+                padding: 12px 14px 16px;
+            }
+
+            .line,
+            #cmd-input,
+            #prompt-label {
+                font-size: 12px;
+            }
+
+            #ascii {
+                font-size: 6.5px;
+                line-height: 1.3;
+            }
+
+            #url-pill {
+                max-width: none;
+            }
+
+            .s-hide {
+                display: none;
+            }
+
+            .ktable {
+                font-size: 10px;
+                margin-left: 4px;
+            }
+
+            .ktable th,
+            .ktable td {
+                padding-right: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            body::before,
+            .pulse,
+            .pulse.crash,
+            .stage.active .sicon,
+            .tag,
+            .boot,
+            .ktable {
+                animation: none !important;
+            }
+        }
+
+        noscript .fallback {
+            display: block;
+            padding: 28px;
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        noscript h1 {
+            color: var(--bright);
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        noscript h2 {
+            color: var(--green);
+            font-size: 13px;
+            margin: 16px 0 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="topbar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <div id="url-pill">
+                <span class="lock">🔒</span>
+                <span class="domain">gaourav.dev</span>
+            </div>
+            <div id="clock">00:00:00</div>
+        </div>
+
+        <div id="tabbar">
+            <div class="tab active">~/portfolio — bash</div>
+            <div class="tab" style="opacity:0.35">+</div>
+        </div>
+
+        <div id="main">
+            <div id="terminal-body">
+                <div id="output" aria-live="polite" aria-atomic="false"></div>
+                <div id="input-row">
+                    <span id="prompt-label">visitor@gaourav.dev<span class="ctx">:~$</span></span>
+                    <input id="cmd-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+                        aria-label="Terminal command input" disabled
+                        placeholder="booting…" />
+                </div>
+            </div>
+
+            <!-- ── Ops sidebar ───────────────────────────── -->
+            <aside id="sidebar" aria-label="Cluster status widgets">
+
+                <div class="panel">
+                    <div class="panel-head"><span class="pulse"></span>cluster
+                        <span class="badge" id="pods-badge">0/0 up</span>
+                    </div>
+                    <div class="panel-body" id="pod-list"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">pipeline
+                        <span class="badge" id="pipe-badge">idle</span>
+                    </div>
+                    <div class="panel-body">
+                        <div id="stage-list"></div>
+                        <div class="rail"><i id="pipe-rail"></i></div>
+                        <div style="font-size:9px;color:var(--muted);display:flex;">
+                            <span id="pipe-commit">#0000000</span>
+                            <span style="margin-left:auto" id="pipe-branch">main</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">metrics
+                        <span class="badge">live</span>
+                    </div>
+                    <div class="panel-body" id="metric-list"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">slo</div>
+                    <div class="panel-body" style="font-size:10px;color:var(--muted);line-height:1.9;">
+                        <div style="display:flex"><span>availability</span><span
+                                style="margin-left:auto;color:var(--green)">99.98%</span></div>
+                        <div style="display:flex"><span>error budget</span><span
+                                style="margin-left:auto;color:var(--green)">87% left</span></div>
+                        <div style="display:flex"><span>region</span><span
+                                style="margin-left:auto;color:var(--text)">ap-south-1</span></div>
+                        <div style="display:flex"><span>uptime</span><span style="margin-left:auto;color:var(--text)"
+                                id="slo-uptime">—</span></div>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+
+        <div id="statusbar">
+            <div class="s-left">
+                <span><span class="s-dot"></span>DAEMON v2.0.0</span>
+                <span class="s-pill s-hide">Cloud &amp; DevOps</span>
+                <span class="s-pill">RHCSA</span>
+                <span class="s-pill s-hide">MIT-WPU</span>
+            </div>
+            <div class="s-right">
+                <span class="s-pill s-hide" id="sb-region">ap-south-1</span>
+                <span class="s-pill" id="sb-pods">— pods</span>
+                <span id="status-cmd" class="s-pill">boot</span>
+            </div>
+        </div>
+
+    </div>
+
+    <noscript>
+        <div class="fallback">
+            <h1>Gaourav Patil — Cloud &amp; DevOps Engineer</h1>
+            <div>RHCSA certified · Pune, Maharashtra, India · gaourav.dev</div>
+
+            <h2>About</h2>
+            <div>RHCSA-certified Cloud &amp; DevOps Engineer with hands-on experience in AWS Cloud, Linux systems and
+                AI tooling. Currently pursuing an MCA at MIT World Peace University, Pune, specializing in Cloud
+                Computing, DevOps and Artificial Intelligence.</div>
+
+            <h2>Experience</h2>
+            <div>AWS Cloud Intern — F13 Technologies Pvt Ltd (Remote, Delhi), Jun 2025 – Aug 2025. Deployed and managed
+                AWS EC2 infrastructure with VPC networking for AI/ML workloads, automated cloud operations with Lambda,
+                and managed data storage across S3, RDS and DynamoDB.</div>
+
+            <h2>Projects</h2>
+            <div>AnnaData — AI-powered farmer intelligence platform (Node.js, Express, Python, PostgreSQL, React).<br />
+                Fitness MicroService — distributed microservices app (Java, Spring Boot, Eureka, Nginx, PostgreSQL).
+            </div>
+
+            <h2>Skills</h2>
+            <div>AWS · Linux · Docker · Kubernetes · CI/CD · Jenkins · Nginx · Python · Java · Spring Boot · Node.js ·
+                PostgreSQL · Git</div>
+
+            <h2>Contact</h2>
+            <div>
+                <a href="mailto:patilgaourav304@gmail.com" style="color:#58a6ff">patilgaourav304@gmail.com</a> ·
+                <a href="https://www.linkedin.com/in/gaourav-patil-885695272" style="color:#58a6ff">LinkedIn</a> ·
+                <a href="https://github.com/GaouravPatil" style="color:#58a6ff">GitHub</a> ·
+                <a href="GaouravPatil%20-%20Resume%20(2).pdf" style="color:#58a6ff">Resume (PDF)</a>
+            </div>
+
+            <h2></h2>
+            <div style="color:#8b949e">This portfolio renders an interactive terminal with JavaScript enabled.</div>
+        </div>
+    </noscript>
+
+    <script>
+        'use strict';
+
+        const termBody = document.getElementById('terminal-body');
+        const out = document.getElementById('output');
+        const inp = document.getElementById('cmd-input');
+        const statusCmd = document.getElementById('status-cmd');
+
+        /* ── Timing (full cinematic) ─────────────────────────── */
+        const CHAR_DELAY = 15;
+        const LINE_DELAY = 30;
+        const TAG_DELAY = 80;
+        const BOOT_DELAY = 105;
+
+        const RESUME_PDF = 'GaouravPatil - Resume (2).pdf';
+        const BOOT_AT = new Date();
+
+        let isTyping = false;
+        let abortRun = false;
+        const cmdHistory = [];
+        let histIdx = -1;
+
+        /* ── Pods: every section is a workload ───────────────── */
+        const PODS = [
+            { key: 'about', pod: 'about-7f9c4d', ready: '1/1', status: 'Running', restarts: 0, age: '3y' },
+            { key: 'skills', pod: 'skills-c4d8b2', ready: '1/1', status: 'Running', restarts: 2, age: '2y' },
+            { key: 'experience', pod: 'experience-a19f3e', ready: '1/1', status: 'Running', restarts: 0, age: '14mo' },
+            { key: 'projects', pod: 'projects-b62c7a', ready: '2/2', status: 'Running', restarts: 0, age: '8mo' },
+            { key: 'education', pod: 'education-e5f21d', ready: '1/1', status: 'Running', restarts: 0, age: '13mo' },
+            { key: 'contact', pod: 'contact-4a8e9b', ready: '1/1', status: 'Running', restarts: 0, age: '3y' },
+            { key: 'resume', pod: 'resume-d73f52', ready: '1/1', status: 'Running', restarts: 0, age: '1mo' },
+            { key: 'sleep', pod: 'sleep-0f3a1c', ready: '0/1', status: 'CrashLoopBackOff', restarts: 47, age: '3y' },
+        ];
+
+        const podByName = name => PODS.find(p => p.key === name || p.pod === name || p.pod.startsWith(name + '-'));
+
+        /* ── Content ─────────────────────────────────────────── */
+        const ASCII = ` ██████╗  █████╗  ██████╗ ██╗   ██╗██████╗  █████╗ ██╗   ██╗
+██╔════╝ ██╔══██╗██╔═══██╗██║   ██║██╔══██╗██╔══██╗██║   ██║
+██║  ███╗███████║██║   ██║██║   ██║██████╔╝███████║██║   ██║
+██║   ██║██╔══██║██║   ██║██║   ██║██╔══██╗██╔══██║╚██╗ ██╔╝
+╚██████╔╝██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║ ╚████╔╝
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝`;
+
+        const commands = {
+
+            help: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Cluster Ops' },
+                { t: 'line', c: 'muted', v: '  kubectl get pods       — list every section as a workload' },
+                { t: 'line', c: 'muted', v: '  kubectl logs <pod>     — stream a section (tab-completes)' },
+                { t: 'line', c: 'muted', v: '  kubectl describe <pod> — pod metadata & events' },
+                { t: 'line', c: 'muted', v: '  pipeline               — CI/CD pipeline status' },
+                { t: 'line', c: 'muted', v: '  top                    — live resource metrics' },
+                { t: 'empty' },
+                { t: 'sec', v: 'Profile' },
+                { t: 'line', c: 'muted', v: '  whoami · about · skills · experience' },
+                { t: 'line', c: 'muted', v: '  projects · education · contact · resume' },
+                { t: 'empty' },
+                { t: 'sec', v: 'System' },
+                { t: 'line', c: 'muted', v: '  neofetch · uptime · ls · cat <file> · git log' },
+                { t: 'line', c: 'muted', v: '  docker ps · terraform plan · history · banner · clear' },
+                { t: 'empty' },
+                { t: 'line', c: 'warning', v: '  Tab completes · ↑ ↓ history · Ctrl+C interrupts output' },
+                { t: 'empty' },
+            ],
+
+            whoami: () => [
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Gaourav Patil' },
+                { t: 'line', c: 'accent', v: '  Where CI/CD Meets AI — Cloud & DevOps Engineer' },
+                { t: 'line', c: 'muted', v: '  📍 Pune, Maharashtra, India   ·   ap-south-1' },
+                { t: 'line', c: 'success', v: '  🌐 gaourav.dev' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  "Automate everything. Break nothing. Ship faster."' },
+                { t: 'empty' },
+            ],
+
+            about: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'About Me' },
+                { t: 'line', c: '', v: "  Hey! I'm Gaourav Patil — RHCSA-certified Cloud & DevOps Engineer" },
+                { t: 'line', c: '', v: '  with hands-on experience in AWS Cloud, Linux systems, and AI tools.' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  I am driven by a passion for creating smart, automation-focused' },
+                { t: 'line', c: '', v: '  solutions — from CI/CD pipelines to AI-powered internal tools like' },
+                { t: 'line', c: '', v: '  intelligent support chatbots that enhance IT operations.' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  Currently pursuing MCA at MIT-WPU Pune, specializing in' },
+                { t: 'line', c: '', v: '  Cloud Computing, DevOps, and Artificial Intelligence.' },
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  > kubectl logs skills   to see what I work with.' },
+                { t: 'empty' },
+            ],
+
+            experience: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Work Experience' },
+                { t: 'line', c: 'bold', v: '  AWS Cloud Intern' },
+                { t: 'line', c: 'accent', v: '  F13 Technologies Pvt Ltd · Remote, Delhi' },
+                { t: 'line', c: 'muted', v: '  Jun 2025 – Aug 2025' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  • Deployed and managed cloud infrastructure on AWS EC2,' },
+                { t: 'line', c: '', v: '    configuring VPC networking for secure, scalable AI/ML workloads.' },
+                { t: 'line', c: '', v: '  • Automated routine cloud operations using AWS Lambda,' },
+                { t: 'line', c: '', v: '    accelerating iteration cycles for AI model deployment pipelines.' },
+                { t: 'line', c: '', v: '  • Managed data storage with S3 and RDS/DynamoDB, structuring' },
+                { t: 'line', c: '', v: '    data pipelines for efficient ingestion of AI-ready datasets.' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Tech: EC2 · VPC · S3 · EBS · RDS · DynamoDB · Lambda · Shield' },
+                { t: 'empty' },
+            ],
+
+            skills: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Technical Skills' },
+                { t: 'line', c: 'success', v: '  Programming Languages' },
+                { t: 'tags', v: ['C++', 'Java', 'Go', 'Python'], color: '' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Frameworks & Libraries' },
+                { t: 'tags', v: ['React.js', 'Express', 'Flask', 'Spring Boot'], color: 'blue' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Cloud & DevOps' },
+                { t: 'tags', v: ['AWS', 'GCP', 'Docker', 'Kubernetes', 'Jenkins', 'Linux', 'GitHub', 'CI/CD', 'Nginx'], color: 'purple' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Databases' },
+                { t: 'tags', v: ['PostgreSQL', 'MongoDB', 'Redis'], color: 'orange' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Tools' },
+                { t: 'tags', v: ['Git', 'Postman', 'Eureka', 'AWS SNS'], color: 'blue' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  Soft Skills' },
+                { t: 'tags', v: ['Leadership', 'Problem Solving', 'Critical Thinking'], color: '' },
+                { t: 'empty' },
+            ],
+
+            projects: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Projects' },
+
+                { t: 'line', c: 'bold', v: '  AnnaData 🌾  [Lead Developer]' },
+                { t: 'line', c: 'muted', v: '  AI-Powered Farmer Intelligence Platform · Present' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  • Engineered a full-stack platform using GrokAI,' },
+                { t: 'line', c: '', v: '    Weather API and Location API for real-time agronomic data.' },
+                { t: 'line', c: '', v: '  • Executed RESTful API orchestration with async middleware.' },
+                { t: 'line', c: '', v: '  • Delivered commodity telemetry & subsidy procurement' },
+                { t: 'line', c: '', v: '    pathways for rural stakeholders.' },
+                { t: 'empty' },
+                { t: 'tags', v: ['Node.js', 'Express', 'Python', 'PostgreSQL', 'GrokAI', 'React.js'], color: 'green' },
+                { t: 'empty' },
+
+                { t: 'line', c: 'bold', v: '  Fitness MicroService 🏋️  [Individual]' },
+                { t: 'line', c: 'muted', v: '  Distributed Microservices App · Dec 2025 – Present' },
+                { t: 'empty' },
+                { t: 'line', c: '', v: '  • Built a distributed fitness app using microservices arch.' },
+                { t: 'line', c: '', v: '  • Independent domains: auth, workout, diet, activity, notifications.' },
+                { t: 'line', c: '', v: '  • Service interaction via REST APIs and messaging queues.' },
+                { t: 'empty' },
+                { t: 'tags', v: ['Java', 'Spring Boot', 'Eureka', 'Nginx', 'OpenAI', 'AWS SNS', 'PostgreSQL'], color: 'purple' },
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  Source: ' },
+                { t: 'links', v: [{ label: 'github.com/GaouravPatil', href: 'https://github.com/GaouravPatil' }] },
+                { t: 'empty' },
+            ],
+
+            education: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Education' },
+                { t: 'line', c: 'bold', v: '  Master of Computer Applications (MCA)' },
+                { t: 'line', c: 'accent', v: '  MIT World Peace University, Pune' },
+                { t: 'line', c: 'muted', v: '  Jul 2025 – Present  ·  CGPA: 7.32' },
+                { t: 'line', c: '', v: '  Coursework: DSA · Java Web & Network Programming' },
+                { t: 'line', c: '', v: '  Probability & Statistics · Cloud Computing' },
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Bachelor of Computer Applications (BCA)' },
+                { t: 'line', c: 'accent', v: '  Latur' },
+                { t: 'line', c: 'muted', v: '  Completed' },
+                { t: 'empty' },
+                { t: 'sec', v: 'Certifications' },
+                { t: 'line', c: 'success', v: '  ✓ Red Hat Certified System Administrator (RHCSA)' },
+                { t: 'line', c: 'success', v: '  ✓ Basics of Kubernetes — The Linux Foundation / Linux Academy' },
+                { t: 'empty' },
+            ],
+
+            contact: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Contact' },
+                { t: 'line', c: 'muted', v: '  Email' },
+                { t: 'links', v: [{ label: 'patilgaourav304@gmail.com', href: 'mailto:patilgaourav304@gmail.com' }] },
+                { t: 'line', c: 'muted', v: '  Phone' },
+                { t: 'links', v: [{ label: '+91 98348 92067', href: 'tel:+919834892067' }] },
+                { t: 'line', c: 'muted', v: '  Profiles' },
+                {
+                    t: 'links', v: [
+                        { label: 'GitHub', href: 'https://github.com/GaouravPatil' },
+                        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/gaourav-patil-885695272' },
+                        { label: 'gaourav.dev', href: 'https://gaourav.dev' },
+                    ]
+                },
+                { t: 'empty' },
+                { t: 'line', c: 'accent', v: "  I'm open to internships, collaborations & opportunities!" },
+                { t: 'line', c: 'muted', v: "  Don't hesitate to reach out. Let's build something great." },
+                { t: 'empty' },
+            ],
+
+            resume: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Resume — Gaourav Patil' },
+                { t: 'line', c: 'bold', v: '  Gaourav Patil — Cloud & DevOps Engineer' },
+                { t: 'line', c: 'muted', v: '  "Where CI/CD Meets AI: An AI Cloud Engineer Stepping into' },
+                { t: 'line', c: 'muted', v: '   Intelligent Automation"' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  ✓ RHCSA Certified — Red Hat System Administrator' },
+                { t: 'line', c: 'success', v: '  ✓ AWS Cloud Intern — F13 Technologies Pvt Ltd' },
+                { t: 'line', c: 'success', v: '  ✓ Projects — AnnaData · Fitness MicroService' },
+                { t: 'line', c: 'success', v: '  ✓ MCA — MIT World Peace University, Pune' },
+                { t: 'empty' },
+                { t: 'resumelink' },
+                { t: 'empty' },
+            ],
+
+            banner: () => [
+                { t: 'ascii' },
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Gaourav Patil — Cloud & DevOps Engineer' },
+                { t: 'line', c: 'success', v: '  🌐 gaourav.dev' },
+                { t: 'line', c: 'muted', v: '  MIT-WPU Pune  |  RHCSA Certified  |  Cloud · DevOps · AI' },
+                { t: 'line', c: 'accent', v: '  "Automate everything. Break nothing. Ship faster."' },
+                { t: 'empty' },
+            ],
+
+            neofetch: () => [
+                { t: 'empty' },
+                { t: 'neofetch' },
+                { t: 'empty' },
+            ],
+
+            pipeline: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Pipeline — gaourav.dev/main' },
+                { t: 'pipeinline' },
+                { t: 'line', c: 'muted', v: '  All stages green · deployed to ap-south-1 · 99.98% availability' },
+                { t: 'empty' },
+            ],
+
+            top: () => [
+                { t: 'empty' },
+                { t: 'sec', v: 'Live Metrics' },
+                { t: 'metrics' },
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  Sampled every 1.2s · synthetic telemetry, real vibes.' },
+                { t: 'empty' },
+            ],
+
+            uptime: () => {
+                const d = new Date();
+                const yrs = ((d - new Date('2022-08-01')) / 31557600000).toFixed(1);
+                return [
+                    { t: 'empty' },
+                    { t: 'line', c: '', v: `  up ${yrs} years building things,  load average: 0.42, 0.31, 0.28` },
+                    { t: 'line', c: 'muted', v: `  session started ${BOOT_AT.toTimeString().slice(0, 8)} · 1 visitor connected` },
+                    { t: 'empty' },
+                ];
+            },
+
+            ls: () => [
+                { t: 'empty' },
+                { t: 'line', c: 'cyan', v: '  about.yaml      skills.tf       experience.json' },
+                { t: 'line', c: 'cyan', v: '  projects/       education.md    contact.env' },
+                { t: 'line', c: 'muted', v: '  Dockerfile      Makefile        README.md' },
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  > cat <file>  to read one.' },
+                { t: 'empty' },
+            ],
+
+            'git log': () => [
+                { t: 'empty' },
+                { t: 'line', c: 'warning', v: '  commit 8f2c1a9  (HEAD -> main, origin/main)' },
+                { t: 'line', c: 'muted', v: '  Author: Gaourav Patil <patilgaourav304@gmail.com>' },
+                { t: 'line', c: '', v: '      feat: ship fitness microservice notification domain' },
+                { t: 'empty' },
+                { t: 'line', c: 'warning', v: '  commit 4a19e3f' },
+                { t: 'line', c: '', v: '      feat(annadata): async middleware for agronomic APIs' },
+                { t: 'empty' },
+                { t: 'line', c: 'warning', v: '  commit c7b03d2' },
+                { t: 'line', c: '', v: '      chore: pass RHCSA — /dev/confidence remounted rw' },
+                { t: 'empty' },
+            ],
+
+            'docker ps': () => [
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  CONTAINER   IMAGE                 STATUS         PORTS' },
+                { t: 'line', c: '', v: '  9f2ac1b3    annadata/api:1.4      Up 8 months    0.0.0.0:8080' },
+                { t: 'line', c: '', v: '  4de91c07    fitness/gateway:2.0   Up 3 months    0.0.0.0:8081' },
+                { t: 'line', c: '', v: '  ba73e2f9    postgres:16-alpine    Up 8 months    5432' },
+                { t: 'line', c: '', v: '  1c8fd405    nginx:alpine          Up 8 months    80, 443' },
+                { t: 'empty' },
+            ],
+
+            'terraform plan': () => [
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: '  Terraform will perform the following actions:' },
+                { t: 'empty' },
+                { t: 'line', c: 'success', v: '  + aws_instance.opportunity        will be created' },
+                { t: 'line', c: 'success', v: '  + aws_iam_role.gaourav_patil      will be created' },
+                { t: 'line', c: 'warning', v: '  ~ module.career.next_role         will be updated in-place' },
+                { t: 'empty' },
+                { t: 'line', c: 'bold', v: '  Plan: 2 to add, 1 to change, 0 to destroy.' },
+                { t: 'line', c: 'muted', v: '  Apply with: contact' },
+                { t: 'empty' },
+            ],
+
+            sudo: () => [
+                { t: 'empty' },
+                { t: 'line', c: 'error', v: '  visitor is not in the sudoers file.' },
+                { t: 'line', c: 'muted', v: '  This incident has been reported. (to nobody, relax)' },
+                { t: 'empty' },
+            ],
+
+            exit: () => [
+                { t: 'empty' },
+                { t: 'line', c: 'muted', v: "  There is no exit. Only opportunities. Try 'contact'." },
+                { t: 'empty' },
+            ],
+
+            clear: () => null,
+        };
+
+        /* ── cat <file> ──────────────────────────────────────── */
+        const FILES = {
+            'about.yaml': 'about', 'skills.tf': 'skills', 'experience.json': 'experience',
+            'education.md': 'education', 'contact.env': 'contact', 'readme.md': 'about',
+            'dockerfile': 'about', 'makefile': 'help',
+        };
+
+        /* ── Aliases ─────────────────────────────────────────── */
+        const ALIASES = {
+            'k': 'kubectl', 'ps': 'docker ps', 'me': 'whoami', 'cv': 'resume',
+            'metrics': 'top', 'htop': 'top', 'ci': 'pipeline', 'cd': 'ls',
+            'social': 'contact', 'email': 'contact', 'github': 'contact',
+            'kubectl get all': 'kubectl get pods',
+        };
+
+        /* ── Helpers ─────────────────────────────────────────── */
+        function scrollToBottom() { termBody.scrollTop = termBody.scrollHeight; }
+        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+        function el(tag, cls, text) {
+            const n = document.createElement(tag);
+            if (cls) n.className = cls;
+            if (text != null) n.textContent = text;
+            return n;
+        }
+
+        /* ── Widget builders ─────────────────────────────────── */
+        function buildAscii() {
+            const pre = el('pre', null, ASCII);
+            pre.id = 'ascii';
+            return pre;
+        }
+
+        function buildResumeLink() {
+            const d = el('div', 'line');
+            d.style.paddingLeft = '16px';
+
+            const dl = el('a', 'resume-btn green', '⬇  Download Resume (PDF)');
+            dl.href = RESUME_PDF;
+            dl.setAttribute('download', 'GaouravPatil - Resume.pdf');
+
+            const view = el('a', 'resume-btn blue', '👁  View Resume');
+            view.href = RESUME_PDF;
+            view.target = '_blank';
+            view.rel = 'noopener';
+
+            d.append(dl, view);
+            return d;
+        }
+
+        function buildLinks(items) {
+            const d = el('div', 'line');
+            d.style.paddingLeft = '16px';
+            items.forEach((it, i) => {
+                if (i) d.append(document.createTextNode('   ·   '));
+                const a = el('a', 'tlink', it.label);
+                a.href = it.href;
+                if (it.href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
+                d.append(a);
+            });
+            return d;
+        }
+
+        function buildPodTable() {
+            const t = el('table', 'ktable');
+            const thead = el('thead');
+            const hr = el('tr');
+            ['NAME', 'READY', 'STATUS', 'RESTARTS', 'AGE'].forEach(h => hr.append(el('th', null, h)));
+            thead.append(hr);
+
+            const tb = el('tbody');
+            PODS.forEach(p => {
+                const tr = el('tr');
+                tr.append(el('td', null, p.pod), el('td', null, p.ready));
+                const cls = p.status === 'Running' ? 'st-run' : p.status === 'Pending' ? 'st-pend' : 'st-crash';
+                tr.append(el('td', cls, p.status), el('td', null, String(p.restarts)), el('td', null, p.age));
+                tr.title = `kubectl logs ${p.pod}`;
+                tr.addEventListener('click', () => { if (!isTyping) run('kubectl logs ' + p.key); });
+                tb.append(tr);
+            });
+
+            t.append(thead, tb);
+            const wrap = el('div');
+            wrap.append(t);
+            return wrap;
+        }
+
+        function buildPipeInline() {
+            const d = el('div', 'pipe-inline');
+            ['checkout', 'build', 'test', 'scan', 'deploy'].forEach((s, i) => {
+                if (i) d.append(el('span', 'arrow', '──▶'));
+                d.append(el('span', 'pstage ok', '✓ ' + s));
+            });
+            return d;
+        }
+
+        function buildNeofetch() {
+            const rows = [
+                ['visitor', '@', 'gaourav.dev'],
+                null,
+                ['os', 'Portfolio OS 2.0 (Fedora-flavoured)'],
+                ['host', 'gaourav.dev · ap-south-1'],
+                ['kernel', 'devops-6.11.0-cloud'],
+                ['uptime', '3.2 years shipping'],
+                ['shell', 'bash 5.2'],
+                ['role', 'Cloud & DevOps Engineer'],
+                ['certs', 'RHCSA · Kubernetes Basics'],
+                ['edu', 'MCA @ MIT-WPU Pune'],
+                ['stack', 'AWS · Linux · Docker · K8s · CI/CD'],
+                ['langs', 'Python · Java · Go · C++'],
+            ];
+
+            const wrap = el('div');
+            wrap.style.cssText = 'display:flex;gap:22px;align-items:flex-start;padding-left:16px;flex-wrap:wrap';
+
+            const logo = el('pre', null,
+                '     ▄▄▄▄▄▄▄▄\n' +
+                '   ▄█▀      ▀█▄\n' +
+                '  █▀  ▄▄▄▄▄▄  ▀█\n' +
+                '  █  █ ████ █  █\n' +
+                '  █  █ ████ █  █\n' +
+                '  █▄  ▀▀▀▀▀▀  ▄█\n' +
+                '   ▀█▄      ▄█▀\n' +
+                '     ▀▀▀▀▀▀▀▀');
+            logo.style.cssText = 'color:var(--blue);font-size:11px;line-height:1.25;text-shadow:0 0 16px rgba(88,166,255,0.35)';
+
+            const info = el('div');
+            info.style.cssText = 'font-size:12px;line-height:1.75';
+            rows.forEach(r => {
+                if (!r) {
+                    const rule = el('div', null, '─'.repeat(34));
+                    rule.style.color = 'var(--border)';
+                    info.append(rule);
+                    return;
+                }
+                const line = el('div');
+                if (r.length === 3) {
+                    const a = el('span', null, r[0]); a.style.color = 'var(--green)';
+                    const b = el('span', null, r[1]); b.style.color = 'var(--text)';
+                    const c = el('span', null, r[2]); c.style.color = 'var(--green)';
+                    line.append(a, b, c);
+                } else {
+                    const k = el('span', null, r[0].padEnd(8));
+                    k.style.color = 'var(--blue)';
+                    const v = el('span', null, ': ' + r[1]);
+                    v.style.color = 'var(--text)';
+                    line.append(k, v);
+                }
+                info.append(line);
+            });
+
+            wrap.append(logo, info);
+            return wrap;
+        }
+
+        /* ── Metrics engine ──────────────────────────────────── */
+        const METRICS = [
+            { key: 'cpu', label: 'cpu', unit: '%', v: 34, min: 8, max: 92, color: 'var(--blue)', hist: [] },
+            { key: 'mem', label: 'mem', unit: '%', v: 58, min: 30, max: 88, color: 'var(--purple)', hist: [] },
+            { key: 'net', label: 'net i/o', unit: 'MB/s', v: 12, min: 1, max: 48, color: 'var(--green)', hist: [] },
+            { key: 'p95', label: 'p95 latency', unit: 'ms', v: 84, min: 40, max: 220, color: 'var(--orange)', hist: [] },
+        ];
+
+        METRICS.forEach(m => {
+            for (let i = 0; i < 44; i++) {
+                m.v = Math.min(m.max, Math.max(m.min, m.v + (Math.random() - 0.5) * (m.max - m.min) * 0.18));
+                m.hist.push(m.v);
+            }
+        });
+
+        function stepMetrics() {
+            METRICS.forEach(m => {
+                m.v = Math.min(m.max, Math.max(m.min, m.v + (Math.random() - 0.5) * (m.max - m.min) * 0.16));
+                m.hist.push(m.v);
+                if (m.hist.length > 44) m.hist.shift();
+            });
+        }
+
+        function sparkSvg(hist, color, w = 100, h = 26) {
+            const max = Math.max(...hist), min = Math.min(...hist);
+            const range = (max - min) || 1;
+            const pts = hist.map((v, i) => {
+                const x = (i / (hist.length - 1)) * w;
+                const y = h - 2 - ((v - min) / range) * (h - 5);
+                return `${x.toFixed(2)},${y.toFixed(2)}`;
+            });
+            const line = 'M' + pts.join(' L');
+            const area = `${line} L${w},${h} L0,${h} Z`;
+            return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+                <path d="${area}" fill="${color}" opacity="0.13"/>
+                <path d="${line}" fill="none" stroke="${color}" stroke-width="1.2"
+                      stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            </svg>`;
+        }
+
+        function buildMetricsBlock() {
+            const wrap = el('div');
+            wrap.style.cssText = 'padding-left:16px;max-width:520px';
+            METRICS.forEach(m => {
+                const box = el('div', 'metric');
+                const top = el('div', 'metric-top');
+                top.style.fontSize = '11px';
+                top.append(el('span', null, m.label));
+                const val = el('span', 'mval', m.v.toFixed(m.unit === 'MB/s' ? 1 : 0) + ' ' + m.unit);
+                top.append(val);
+                box.append(top);
+                box.insertAdjacentHTML('beforeend', sparkSvg(m.hist, m.color, 100, 30));
+                wrap.append(box);
+            });
+            return wrap;
+        }
+
+        /* ── Sidebar: build + drive ──────────────────────────── */
+        const sidebar = document.getElementById('sidebar');
+
+        function initSidebarPods() {
+            const list = document.getElementById('pod-list');
+            list.textContent = '';
+            PODS.forEach(p => {
+                const row = el('div', 'pod-row');
+                const cls = p.status === 'Running' ? 'pulse' : p.status === 'Pending' ? 'pulse warn' : 'pulse crash';
+                row.append(el('span', cls), el('span', 'pname', p.pod), el('span', 'pstat', p.ready));
+                row.title = `kubectl logs ${p.pod}`;
+                row.addEventListener('click', () => { if (!isTyping) run('kubectl logs ' + p.key); });
+                list.append(row);
+            });
+            const up = PODS.filter(p => p.status === 'Running').length;
+            document.getElementById('pods-badge').textContent = `${up}/${PODS.length} up`;
+            document.getElementById('sb-pods').textContent = `${up}/${PODS.length} pods`;
+        }
+
+        function initSidebarMetrics() {
+            const list = document.getElementById('metric-list');
+            list.textContent = '';
+            METRICS.forEach(m => {
+                const box = el('div', 'metric');
+                box.dataset.k = m.key;
+                const top = el('div', 'metric-top');
+                top.append(el('span', null, m.label), el('span', 'mval', '—'));
+                const meter = el('div', 'meter');
+                const fill = el('i');
+                fill.style.background = m.color;
+                meter.append(fill);
+                box.append(top);
+                box.insertAdjacentHTML('beforeend', sparkSvg(m.hist, m.color));
+                box.append(meter);
+                list.append(box);
+            });
+        }
+
+        function paintSidebarMetrics() {
+            METRICS.forEach(m => {
+                const box = document.querySelector(`#metric-list .metric[data-k="${m.key}"]`);
+                if (!box) return;
+                const pct = ((m.v - m.min) / (m.max - m.min)) * 100;
+                box.querySelector('.mval').textContent = m.v.toFixed(m.unit === 'MB/s' ? 1 : 0) + ' ' + m.unit;
+                box.querySelector('.spark').outerHTML = sparkSvg(m.hist, m.color);
+                const fill = box.querySelector('.meter i');
+                fill.style.width = pct.toFixed(1) + '%';
+                fill.style.background = pct > 82 ? 'var(--red)' : pct > 62 ? 'var(--yellow)' : m.color;
+            });
+        }
+
+        /* ── Pipeline animation (always running) ─────────────── */
+        const STAGES = [
+            { name: 'checkout', dur: 2 }, { name: 'build', dur: 7 }, { name: 'test', dur: 9 },
+            { name: 'scan', dur: 4 }, { name: 'deploy', dur: 6 },
+        ];
+        let pipeTick = 0;
+        const PIPE_TOTAL = STAGES.reduce((a, s) => a + s.dur, 0) + 6;
+
+        function initPipeline() {
+            const list = document.getElementById('stage-list');
+            list.textContent = '';
+            STAGES.forEach(s => {
+                const row = el('div', 'stage queued');
+                row.dataset.n = s.name;
+                row.append(el('span', 'sicon', '○'), el('span', null, s.name), el('span', 'sdur', '—'));
+                list.append(row);
+            });
+        }
+
+        function stepPipeline() {
+            pipeTick = (pipeTick + 1) % PIPE_TOTAL;
+            let acc = 0, activeIdx = -1;
+            STAGES.forEach((s, i) => {
+                const row = document.querySelector(`#stage-list .stage[data-n="${s.name}"]`);
+                if (!row) return;
+                const start = acc; acc += s.dur;
+                const icon = row.querySelector('.sicon');
+                const dur = row.querySelector('.sdur');
+
+                if (pipeTick >= acc) {
+                    row.className = 'stage done';
+                    icon.textContent = '✓';
+                    dur.textContent = s.dur + 's';
+                } else if (pipeTick > start) {
+                    row.className = 'stage active';
+                    icon.textContent = '◐';
+                    dur.textContent = (pipeTick - start) + 's';
+                    activeIdx = i;
+                } else {
+                    row.className = 'stage queued';
+                    icon.textContent = '○';
+                    dur.textContent = '—';
+                }
+            });
+
+            const total = STAGES.reduce((a, s) => a + s.dur, 0);
+            document.getElementById('pipe-rail').style.width =
+                Math.min(100, (pipeTick / total) * 100).toFixed(1) + '%';
+
+            const badge = document.getElementById('pipe-badge');
+            if (activeIdx >= 0) {
+                badge.textContent = 'running';
+                badge.style.color = 'var(--yellow)';
+                badge.style.background = 'rgba(210,153,34,0.14)';
+            } else if (pipeTick >= total) {
+                badge.textContent = 'passed';
+                badge.style.color = 'var(--green)';
+                badge.style.background = 'rgba(63,185,80,0.12)';
+            }
+
+            if (pipeTick === 0) newCommitHash();
+        }
+
+        function newCommitHash() {
+            const hex = '0123456789abcdef';
+            let c = '#';
+            for (let i = 0; i < 7; i++) c += hex[Math.floor(Math.random() * 16)];
+            document.getElementById('pipe-commit').textContent = c;
+        }
+
+        function fmtUptime() {
+            const s = Math.floor((new Date() - BOOT_AT) / 1000);
+            const h = String(Math.floor(s / 3600)).padStart(2, '0');
+            const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+            return `${h}h ${m}m ${String(s % 60).padStart(2, '0')}s`;
+        }
+
+        /* ── Unified renderer ────────────────────────────────── */
+        /* Returns { node, type }. type 'w' (widget) renders instantly;
+           type 't' (text) is typed character-by-character.          */
+        function createItemEl(item) {
+            switch (item.t) {
+                case 'empty': {
+                    const d = el('div', 'line');
+                    d.innerHTML = '&nbsp;';
+                    return { node: d, type: 'w' };
+                }
+                case 'ascii': return { node: buildAscii(), type: 'w' };
+                case 'resumelink': return { node: buildResumeLink(), type: 'w' };
+                case 'links': return { node: buildLinks(item.v), type: 'w' };
+                case 'podtable': return { node: buildPodTable(), type: 'w' };
+                case 'pipeinline': return { node: buildPipeInline(), type: 'w' };
+                case 'neofetch': return { node: buildNeofetch(), type: 'w' };
+                case 'metrics': return { node: buildMetricsBlock(), type: 'w' };
+                case 'sec': {
+                    const d = el('div', 'line sec');
+                    return { node: d, type: 't', text: `  ── ${item.v} ──` };
+                }
+                case 'tags': {
+                    const d = el('div', 'line');
+                    d.style.paddingLeft = '16px';
+                    return { node: d, type: 'tags', tags: item.v, color: item.color || '' };
+                }
+                case 'boot': {
+                    const d = el('div', 'boot');
+                    const tagCls = item.k === 'warn' ? 'warn' : item.k === 'info' ? 'info' : 'ok';
+                    const label = item.k === 'warn' ? ' WARN ' : item.k === 'info' ? ' INFO ' : '  OK  ';
+                    d.append(
+                        el('span', null, '['),
+                        el('span', tagCls, label),
+                        el('span', null, '] '),
+                        el('span', 'msg', item.v),
+                    );
+                    return { node: d, type: 'w' };
+                }
+                default: {
+                    const d = el('div', `line ${item.c || ''}`);
+                    return { node: d, type: 't', text: item.v || '' };
+                }
+            }
+        }
+
+        /* ── Typewriter with interrupt ───────────────────────── */
+        function typeChars(node, text) {
+            return new Promise(resolve => {
+                let i = 0;
+                node.classList.add('typing-cursor');
+                (function next() {
+                    if (abortRun) {
+                        node.textContent = text;
+                        node.classList.remove('typing-cursor');
+                        return resolve();
+                    }
+                    if (i >= text.length) {
+                        node.classList.remove('typing-cursor');
+                        return resolve();
+                    }
+                    node.textContent += text[i++];
+                    scrollToBottom();
+                    setTimeout(next, CHAR_DELAY);
+                })();
+            });
+        }
+
+        async function renderItem(item, instant) {
+            const built = createItemEl(item);
+            out.append(built.node);
+
+            if (instant || abortRun) {
+                if (built.type === 't') built.node.textContent = built.text;
+                if (built.type === 'tags') {
+                    built.tags.forEach(t => built.node.append(el('span', `tag ${built.color}`, t)));
+                }
+                scrollToBottom();
+                return;
+            }
+
+            if (built.type === 't') {
+                await typeChars(built.node, built.text);
+            } else if (built.type === 'tags') {
+                for (const t of built.tags) {
+                    built.node.append(el('span', `tag ${built.color}`, t));
+                    scrollToBottom();
+                    if (abortRun) continue;
+                    await delay(TAG_DELAY);
+                }
+            }
+            scrollToBottom();
+        }
+
+        async function renderItems(items, instant) {
+            for (const item of items) {
+                await renderItem(item, instant);
+                if (!instant && !abortRun) await delay(LINE_DELAY);
+            }
+        }
+
+        function printPrompt(cmd) {
+            const d = el('div', 'line');
+            const p = el('span', null, 'visitor@gaourav.dev:~$ ');
+            p.style.color = 'var(--blue)';
+            d.append(p, el('span', null, cmd));   /* textContent — never innerHTML */
+            out.append(d);
+        }
+
+        /* ── Command resolution ──────────────────────────────── */
+        function resolve(raw) {
+            let key = raw.toLowerCase().replace(/\s+/g, ' ').trim();
+            if (ALIASES[key]) key = ALIASES[key];
+
+            /* Checked before the commands lookup: commands.clear is a
+               function, so it would otherwise resolve to { items: null }. */
+            if (key === 'clear' || key === 'cls' || key === 'reset') return { clear: true };
+            if (commands[key]) return { items: commands[key]() };
+
+            const parts = key.split(' ');
+
+            /* cat <file> */
+            if (parts[0] === 'cat') {
+                const target = FILES[parts[1]];
+                if (target) return { items: commands[target]() };
+                return {
+                    items: [{ t: 'line', c: 'error', v: `  cat: ${parts[1] || ''}: No such file. Try 'ls'.` }],
+                };
+            }
+
+            /* kubectl ... */
+            if (parts[0] === 'kubectl' || parts[0] === 'k') {
+                const verb = parts[1];
+                const arg = parts.slice(2).filter(a => a !== '-n' && a !== 'portfolio' && a !== 'pods' && a !== 'pod');
+
+                if (verb === 'get') {
+                    return {
+                        items: [
+                            { t: 'empty' },
+                            { t: 'podtable' },
+                            { t: 'empty' },
+                            { t: 'line', c: 'muted', v: '  > kubectl logs <pod>   or click a row.' },
+                            { t: 'empty' },
+                        ],
+                    };
+                }
+
+                if (verb === 'logs' || verb === 'describe' || verb === 'exec') {
+                    const p = podByName(arg[0] || '');
+                    if (!p) {
+                        return {
+                            items: [
+                                { t: 'line', c: 'error', v: `  Error from server (NotFound): pods "${arg[0] || ''}" not found` },
+                                { t: 'line', c: 'muted', v: '  > kubectl get pods   to list workloads.' },
+                            ],
+                        };
+                    }
+                    if (p.key === 'sleep') {
+                        return {
+                            items: [
+                                { t: 'empty' },
+                                { t: 'line', c: 'error', v: '  Back-off restarting failed container sleep' },
+                                { t: 'line', c: 'warning', v: `  Last state: Terminated · Reason: OOMKilled · Restarts: ${p.restarts}` },
+                                { t: 'line', c: 'muted', v: '  Known issue. Being worked on. Probably not tonight.' },
+                                { t: 'empty' },
+                            ],
+                        };
+                    }
+                    if (verb === 'describe') {
+                        return {
+                            items: [
+                                { t: 'empty' },
+                                { t: 'line', c: 'bold', v: `  Name:         ${p.pod}` },
+                                { t: 'line', c: '', v: '  Namespace:    portfolio' },
+                                { t: 'line', c: '', v: '  Node:         gaourav-dev/ap-south-1a' },
+                                { t: 'line', c: '', v: `  Status:       ${p.status}` },
+                                { t: 'line', c: '', v: `  Ready:        ${p.ready}    Restarts: ${p.restarts}    Age: ${p.age}` },
+                                { t: 'line', c: '', v: `  Image:        gaourav.dev/${p.key}:latest` },
+                                { t: 'empty' },
+                                { t: 'line', c: 'muted', v: '  Events:  <none>   ·   Healthy.' },
+                                { t: 'empty' },
+                                { t: 'line', c: 'muted', v: `  > kubectl logs ${p.key}   for the contents.` },
+                            ],
+                        };
+                    }
+                    return { items: commands[p.key]() };
+                }
+
+                return {
+                    items: [
+                        { t: 'line', c: 'error', v: `  error: unknown command "${verb || ''}" for "kubectl"` },
+                        { t: 'line', c: 'muted', v: '  Available: get, logs, describe' },
+                    ],
+                };
+            }
+
+            /* Nearest-match suggestion */
+            const known = Object.keys(commands).concat(Object.keys(ALIASES), 'kubectl get pods');
+            const guess = known.find(k => k.startsWith(parts[0]) || parts[0].startsWith(k.slice(0, 3)));
+            return {
+                items: [
+                    { t: 'line', c: 'error', v: `  bash: command not found: ${raw}` },
+                    { t: 'line', c: 'muted', v: guess ? `  Did you mean '${guess}'?  Or type 'help'.` : "  Type 'help' for available commands." },
+                ],
+            };
+        }
+
+        /* ── Run ─────────────────────────────────────────────── */
+        async function run(raw, opts = {}) {
+            const cmd = (raw || '').trim();
+            if (!cmd || isTyping) return;
+
+            if (!opts.quiet) printPrompt(cmd);
+            statusCmd.textContent = cmd.split(' ')[0].toLowerCase();
+
+            const res = resolve(cmd);
+
+            if (res.clear) { out.textContent = ''; scrollToBottom(); return; }
+            if (!res.items) return;
+
+            if (opts.instant) {
+                await renderItems(res.items, true);
+                return;
+            }
+
+            isTyping = true;
+            abortRun = false;
+            inp.disabled = true;
+            await renderItems(res.items, false);
+            isTyping = false;
+            abortRun = false;
+            inp.disabled = false;
+            inp.focus();
+            scrollToBottom();
+        }
+
+        /* ── Tab completion ──────────────────────────────────── */
+        const COMPLETIONS = [
+            'help', 'whoami', 'about', 'skills', 'experience', 'projects', 'education',
+            'contact', 'resume', 'banner', 'neofetch', 'pipeline', 'top', 'uptime',
+            'ls', 'clear', 'sudo', 'exit', 'git log', 'docker ps', 'terraform plan',
+            'kubectl get pods', 'kubectl logs ', 'kubectl describe ',
+            ...PODS.map(p => 'kubectl logs ' + p.key),
+            ...Object.keys(FILES).map(f => 'cat ' + f),
+        ];
+
+        function complete(value) {
+            const v = value.toLowerCase();
+            const hits = COMPLETIONS.filter(c => c.startsWith(v) && c !== v);
+            if (!hits.length) return null;
+            if (hits.length === 1) return { value: hits[0] };
+
+            /* Longest common prefix, plus show the candidates */
+            let lcp = hits[0];
+            for (const h of hits) {
+                let i = 0;
+                while (i < lcp.length && i < h.length && lcp[i] === h[i]) i++;
+                lcp = lcp.slice(0, i);
+            }
+            return { value: lcp.length > value.length ? lcp : value, hits };
+        }
+
+        /* ── Input handling ──────────────────────────────────── */
+        inp.addEventListener('keydown', e => {
+
+            /* Ctrl+C — interrupt, like a real terminal */
+            if (e.key === 'c' && (e.ctrlKey || e.metaKey) && !window.getSelection().toString()) {
+                if (isTyping) {
+                    e.preventDefault();
+                    abortRun = true;
+                    const d = el('div', 'line muted', '^C');
+                    out.append(d);
+                }
+                return;
+            }
+
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                if (isTyping || !inp.value.trim()) return;
+                const r = complete(inp.value.trim());
+                if (!r) return;
+                inp.value = r.value;
+                if (r.hits) {
+                    printPrompt(inp.value);
+                    const d = el('div', 'line muted', '  ' + r.hits.join('   '));
+                    out.append(d);
+                    scrollToBottom();
+                }
+                return;
+            }
+
+            if (e.key === 'Enter') {
+                if (isTyping) return;
+                const val = inp.value.trim();
+                if (val) {
+                    if (cmdHistory[0] !== val) cmdHistory.unshift(val);
+                    if (cmdHistory.length > 50) cmdHistory.pop();
+                    histIdx = -1;
+                }
+                inp.value = '';
+                run(val);
+                return;
+            }
+
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (histIdx < cmdHistory.length - 1) { histIdx++; inp.value = cmdHistory[histIdx]; }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (histIdx > 0) { histIdx--; inp.value = cmdHistory[histIdx]; }
+                else { histIdx = -1; inp.value = ''; }
+            }
+        });
+
+        commands.history = () => {
+            if (!cmdHistory.length) return [{ t: 'line', c: 'muted', v: '  (no history yet)' }];
+            return [{ t: 'empty' }]
+                .concat(cmdHistory.slice().reverse().map((c, i) =>
+                    ({ t: 'line', c: 'muted', v: `  ${String(i + 1).padStart(4)}  ${c}` })))
+                .concat([{ t: 'empty' }]);
+        };
+
+        termBody.addEventListener('click', e => {
+            if (isTyping || e.target.closest('a, tr, .pod-row')) return;
+            if (window.getSelection().toString()) return;
+            inp.focus();
+        });
+
+        /* ── Clock ───────────────────────────────────────────── */
+        function updateClock() {
+            document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8);
+            document.getElementById('slo-uptime').textContent = fmtUptime();
+        }
+
+        /* ── Boot sequence (full cinematic) ──────────────────── */
+        const BOOT = [
+            { k: 'info', v: 'DAEMON BIOS v2.0.0 — gaourav.dev' },
+            { k: 'ok', v: 'Mounted /dev/aws-experience' },
+            { k: 'ok', v: 'Started Linux Foundation service' },
+            { k: 'ok', v: 'Loaded RHCSA credentials' },
+            { k: 'ok', v: 'Reached target Cloud & DevOps' },
+            { k: 'ok', v: 'Started kube-apiserver on 6443' },
+            { k: 'ok', v: 'Connected to cluster gaourav-dev-eks (ap-south-1)' },
+            { k: 'ok', v: 'Applied namespace/portfolio' },
+            { k: 'ok', v: 'Scheduled 7 workloads across 1 node' },
+            { k: 'warn', v: 'pod/sleep-0f3a1c entered CrashLoopBackOff' },
+            { k: 'ok', v: 'Pipeline main@8f2c1a9 — all stages passed' },
+            { k: 'info', v: 'Ingress ready · TLS verified · 99.98% availability' },
+        ];
+
+        async function boot() {
+            for (const line of BOOT) {
+                await renderItem({ t: 'boot', k: line.k, v: line.v }, true);
+                scrollToBottom();
+                await delay(BOOT_DELAY + (line.k === 'warn' ? 320 : 0));
+            }
+
+            await delay(420);
+            await renderItem({ t: 'empty' }, true);
+
+            /* Banner + ASCII */
+            await renderItems(commands.banner(), false);
+
+            /* Cluster comes online */
+            sidebar.classList.add('live');
+            await renderItem({ t: 'line', c: 'muted', v: '  Cluster online. 7/8 pods Running.' }, false);
+            await renderItem({ t: 'empty' }, true);
+            await renderItem({ t: 'podtable' }, true);
+            await renderItem({ t: 'empty' }, true);
+            await renderItem({ t: 'line', c: 'warning', v: "  Type 'help' · Tab completes · Ctrl+C interrupts" }, false);
+            await renderItem({ t: 'empty' }, true);
+
+            statusCmd.textContent = 'ready';
+            inp.disabled = false;
+            inp.placeholder = "try 'kubectl get pods' or 'help'…";
+            if (window.matchMedia('(min-width: 700px)').matches) inp.focus();
+            scrollToBottom();
+        }
+
+        /* ── Init ────────────────────────────────────────────── */
+        initSidebarPods();
+        initSidebarMetrics();
+        initPipeline();
+        paintSidebarMetrics();
+        newCommitHash();
+
+        updateClock();
+        setInterval(updateClock, 1000);
+        setInterval(() => { stepMetrics(); paintSidebarMetrics(); }, 1200);
+        setInterval(stepPipeline, 1000);
+
+        boot();
+    </script>
+</body>
+
+</html>
