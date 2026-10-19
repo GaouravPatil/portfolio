@@ -1,139 +1,227 @@
-import { motion } from 'framer-motion'
-import { BrainCircuit, ShieldAlert, Zap, ExternalLink, Layers } from 'lucide-react'
-import { FiGithub } from 'react-icons/fi'
-import CardSwap, { Card } from './CardSwap'
+import { useState } from 'react'
 
-const projectList = [
+const PROJECTS_DATA = [
   {
-    icon: <BrainCircuit size={26} />,
-    title: 'Nexus',
-    subtitle: 'Cross-Model Persistent Memory LLM Engine',
-    desc: 'An AI orchestration platform querying multiple LLM providers concurrently (Groq, Mistral, ChatGPT, Gemini). Features intelligent latency/cost routing, consensus synthesis, and persistent cross-session chat memory backed by Supabase.',
+    idx: '01',
+    num: '01 / 03',
+    spineTitle: 'AI DevOps Orchestrator',
+    kick: 'Cloud & AI Microservices',
+    title: 'AI DevOps Orchestrator',
+    desc: 'An enterprise AI-assisted DevOps orchestration platform designed for automated Kubernetes cluster resource provisioning, policy validation, and self-healing CI/CD operations through REST APIs.',
     features: [
-      'Multi-provider concurrent AI querying with streaming SSE responses',
-      'Consensus synthesis engine aggregating responses across LLM models',
-      'Persistent memory schema across chat sessions and model changes',
-      'Dynamic fallback & routing based on live provider latency and cost',
+      'Automated Kubernetes resource managers & centralized execution engine',
+      'Enterprise JWT authentication & dependency injection architecture',
+      'Prometheus & Grafana observability pipeline integration',
+      'Scalable microservices prepared for autonomous GitOps deployment',
     ],
-    tech: ['React', 'Python', 'FastAPI', 'Supabase', 'PostgreSQL', 'SSE', 'Docker'],
-    github: 'https://github.com/GaouravPatil',
-    live: 'https://nexus.gaourav.space/',
+    tech: ['Python', 'FastAPI', 'Docker', 'Kubernetes', 'Terraform', 'PostgreSQL', 'Grafana'],
+    githubUrl: 'https://github.com/GaouravPatil/portfolio',
+    uiType: 'k8s',
   },
   {
-    icon: <ShieldAlert size={26} />,
-    title: 'Guardrail',
-    subtitle: 'Self-Healing CI/CD Pipeline Framework',
-    desc: 'An automated CI/CD resiliency layer that monitors build and deployment health in real-time. Detects failure patterns and triggers automated corrective actions, canary rollbacks, and configuration patches without manual triage.',
+    idx: '02',
+    num: '02 / 03',
+    spineTitle: 'AnnaData Agronomic Platform',
+    kick: 'Full-Stack & Agrarian AI',
+    title: 'AnnaData Intelligence',
+    desc: 'A robust agrarian telemetry platform powered by GrokAI, Weather APIs, and Location services to deliver actionable crop advisories, market telemetry, and subsidy procurement pathways.',
     features: [
-      'Real-time stage monitoring across build, test, and container deployment',
-      'Automated canary rollback and policy-as-code verification',
-      'Failure pattern analysis and automated error notification alerts',
-      'Deep integration with GitHub Actions, Jenkins, and ArgoCD',
+      'Real-time Weather & Geo-location API pipeline orchestration',
+      'GrokAI integration for localized predictive agronomic intelligence',
+      'Asynchronous Express & Python middleware data processing',
+      'High-contrast, accessible UI tailored for rapid rural telemetry',
     ],
-    tech: ['Go', 'GitHub Actions', 'ArgoCD', 'Kubernetes', 'Prometheus', 'Docker'],
-    github: 'https://github.com/GaouravPatil',
-    live: null,
+    tech: ['React.js', 'Node.js', 'Express', 'Python', 'PostgreSQL', 'GrokAI'],
+    githubUrl: 'https://github.com/GaouravPatil',
+    uiType: 'telemetry',
   },
   {
-    icon: <Zap size={26} />,
-    title: 'AI Orchestrator for Kubernetes',
-    subtitle: 'Intelligent Autonomous Cluster Scaling',
-    desc: 'An AI-driven operator extension for Kubernetes clusters that analyzes metric telemetry to predict traffic spikes, optimize pod scheduling, reduce cloud node costs, and remediate CrashLoopBackOff anomalies.',
+    idx: '03',
+    num: '03 / 03',
+    spineTitle: 'Nexus AI Engine',
+    kick: 'Intelligent Automation Layer',
+    title: 'Nexus AI Engine',
+    desc: 'A modular AI execution engine connecting multi-model inference (Groq, Mistral, OpenAI) to software workflows with self-healing build remediation and automated infrastructure triage.',
     features: [
-      'Predictive pod auto-scaling using historical telemetry trends',
-      'AI resource optimization reducing node over-provisioning by ~30%',
-      'Automated cluster self-healing for failing pods and nodes',
-      'Federated multi-cluster deployment placement strategies',
+      'Multi-model LLM abstraction layer for high-throughput inference',
+      'Self-healing pipeline agent that diagnoses & repairs build errors',
+      'Event-driven worker architecture with Redis caching',
+      'Automated audit logs and structured JSON telemetry outputs',
     ],
-    tech: ['Python', 'Kubernetes', 'Terraform', 'AWS EKS', 'Helm', 'Prometheus', 'Grafana'],
-    github: 'https://github.com/GaouravPatil',
-    live: null,
+    tech: ['Python', 'Docker', 'Groq / Mistral', 'Redis', 'GitHub Actions', 'Linux'],
+    githubUrl: 'https://github.com/GaouravPatil',
+    uiType: 'pipeline',
   },
 ]
 
 export default function Projects() {
+  const [openIndex, setOpenIndex] = useState(0)
+
   return (
-    <section className="section" id="projects">
-      <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          style={{ textAlign: 'center', marginBottom: 40 }}
-        >
-          <span className="section-badge" style={{ margin: '0 auto 16px' }}>
-            <Layers size={14} /> Featured Innovations
-          </span>
-          <h2 className="section-title">Core Engineering Projects</h2>
-          <p className="section-desc" style={{ margin: '0 auto' }}>
-            Interactive 3D project showcase. Click any card or indicator to cycle through.
+    <section id="work" className="section" aria-labelledby="work-heading">
+      <div className="wrap">
+        <header>
+          <p className="sec-tag">
+            <span>03</span>
+            <span aria-hidden="true">—</span>
+            <span>Work</span>
           </p>
-        </motion.div>
+          <h2 id="work-heading" className="sec-h">
+            <span>Things I've <span className="accent">built.</span></span>
+          </h2>
+        </header>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ paddingBottom: 60 }}
-        >
-          <CardSwap cardDistance={45} verticalDistance={55} delay={6000} pauseOnHover={true}>
-            {projectList.map((project) => (
-              <Card key={project.title}>
-                <div className="project-top-bar">
-                  <div className="project-badge-icon">{project.icon}</div>
-                  <div className="project-links-group">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="icon-btn"
-                        aria-label="GitHub Repository"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FiGithub size={18} />
-                      </a>
-                    )}
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="icon-btn"
-                        aria-label="Live Application"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ExternalLink size={18} />
-                      </a>
-                    )}
-                  </div>
+        {/* Expandable Accordion Panels */}
+        <div className="wk-row">
+          {PROJECTS_DATA.map((proj, idx) => {
+            const isOpen = openIndex === idx
+
+            return (
+              <div
+                key={proj.idx}
+                className={`wk-panel ${isOpen ? 'is-open' : ''}`}
+                onClick={() => !isOpen && setOpenIndex(idx)}
+                role="region"
+                aria-label={proj.title}
+              >
+                {/* Collapsed Spine */}
+                <div
+                  className="wk-spine"
+                  role="button"
+                  tabIndex={isOpen ? -1 : 0}
+                  onClick={() => setOpenIndex(idx)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setOpenIndex(idx)
+                    }
+                  }}
+                >
+                  <span className="wk-sn mono">{proj.num}</span>
+                  <span className="wk-st">{proj.spineTitle}</span>
+                  <span className="wk-plus" aria-hidden="true">+</span>
                 </div>
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <h3 className="project-title-text">{project.title}</h3>
-                  <div className="project-sub-text">{project.subtitle}</div>
-                  <p className="project-body-text">{project.desc}</p>
+                {/* Expanded Content */}
+                <div className="wk-bw">
+                  <div className="wk-body">
+                    {/* Left Column: Details */}
+                    <div className="wk-left">
+                      <span className="wk-kick mono">{proj.kick}</span>
+                      <h3 className="wk-title">{proj.title}</h3>
+                      <p className="wk-desc">{proj.desc}</p>
 
-                  <ul className="project-feature-list">
-                    {project.features.map((feature, idx) => (
-                      <li key={idx}>{feature}</li>
-                    ))}
-                  </ul>
+                      <ul className="wk-feat">
+                        {proj.features.map((feat, fIdx) => (
+                          <li key={fIdx}>{feat}</li>
+                        ))}
+                      </ul>
 
-                  <div className="skill-pill-container" style={{ marginTop: 'auto' }}>
-                    {project.tech.map((t) => (
-                      <span key={t} className="tech-pill">
-                        {t}
-                      </span>
-                    ))}
+                      <ul className="wk-tech" aria-label="Technologies used">
+                        {proj.tech.map((t, tIdx) => (
+                          <li key={tIdx} className="mono">{t}</li>
+                        ))}
+                      </ul>
+
+                      <div className="wk-links-row">
+                        <a
+                          href={proj.githubUrl}
+                          className="btn btn-primary btn-sm"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Repository ↗
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Mini UI Visualization */}
+                    <div className="wk-right">
+                      <div className="wk-vis">
+                        {proj.uiType === 'k8s' && (
+                          <div className="mu-arch">
+                            <div className="mu-head">
+                              <span className="mu-dot green" />
+                              <span className="mu-dot" />
+                              <span className="mu-dot" />
+                              <span className="mu-title-text">k8s-cluster-active</span>
+                            </div>
+                            <div className="mu-box-row">
+                              <div className="mu-box">
+                                <span className="mono" style={{ color: '#10b981' }}>● 12 Pods</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>FastAPI Microservices</div>
+                              </div>
+                              <div className="mu-box">
+                                <span className="mono" style={{ color: '#0284c7' }}>● Ingress</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>TLS / Load Balanced</div>
+                              </div>
+                            </div>
+                            <div className="mu-code-block">
+                              <span style={{ color: '#10b981' }}>$</span> kubectl get orchestration<br />
+                              STATUS: Reconciled (0 fail)<br />
+                              HEALTH: 99.98% Available
+                            </div>
+                          </div>
+                        )}
+
+                        {proj.uiType === 'telemetry' && (
+                          <div className="mu-arch">
+                            <div className="mu-head">
+                              <span className="mu-dot green" />
+                              <span className="mu-dot" />
+                              <span className="mu-dot" />
+                              <span className="mu-title-text">annadata.ai/telemetry</span>
+                            </div>
+                            <div className="mu-box-row">
+                              <div className="mu-box">
+                                <span className="mono">⛅ 28°C / 64%</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>Agri Weather Feed</div>
+                              </div>
+                              <div className="mu-box">
+                                <span className="mono">🤖 GrokAI Advisory</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>Optimal Sowing Window</div>
+                              </div>
+                            </div>
+                            <div className="mu-code-block">
+                              POST /api/v1/advisory<br />
+                              <span style={{ color: '#10b981' }}>{'{'} status: 200, yield_index: "+18%" {'}'}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {proj.uiType === 'pipeline' && (
+                          <div className="mu-arch">
+                            <div className="mu-head">
+                              <span className="mu-dot green" />
+                              <span className="mu-dot" />
+                              <span className="mu-dot" />
+                              <span className="mu-title-text">nexus-healing-agent</span>
+                            </div>
+                            <div className="mu-box-row">
+                              <div className="mu-box">
+                                <span className="mono">⚡ Groq / Mistral</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>Sub-second Triage</div>
+                              </div>
+                              <div className="mu-box">
+                                <span className="mono">🔄 Self-Healing</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>Auto CI/CD Patch</div>
+                              </div>
+                            </div>
+                            <div className="mu-code-block">
+                              <span style={{ color: '#f59e0b' }}>[DETECTED]</span> Dockerfile layer fail<br />
+                              <span style={{ color: '#10b981' }}>[REPAIRED]</span> Cache bust applied (0.4s)
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <span className="wk-cap mono">Interactive Architecture Mockup</span>
+                    </div>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </CardSwap>
-        </motion.div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )
