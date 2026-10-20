@@ -3,10 +3,10 @@ import { useState } from 'react'
 const PROJECTS_DATA = [
   {
     idx: '01',
-    num: '01 / 03',
-    spineTitle: 'AI DevOps Orchestrator',
-    kick: 'Cloud & AI Microservices',
-    title: 'AI DevOps Orchestrator',
+    num: '01 / 04',
+    spineTitle: 'Guardrail',
+    kick: 'AI Agentic Kubernetes',
+    title: 'Guardrail',
     desc: 'An enterprise AI-assisted DevOps orchestration platform designed for automated Kubernetes cluster resource provisioning, policy validation, and self-healing CI/CD operations through REST APIs.',
     features: [
       'Automated Kubernetes resource managers & centralized execution engine',
@@ -15,7 +15,7 @@ const PROJECTS_DATA = [
       'Scalable microservices prepared for autonomous GitOps deployment',
     ],
     tech: ['Python', 'FastAPI', 'Docker', 'Kubernetes', 'Terraform', 'PostgreSQL', 'Grafana'],
-    githubUrl: 'https://github.com/GaouravPatil/portfolio',
+    githubUrl: 'https://github.com/GaouravPatil/Guardrail',
     uiType: 'k8s',
   },
   {
@@ -32,7 +32,7 @@ const PROJECTS_DATA = [
       'High-contrast, accessible UI tailored for rapid rural telemetry',
     ],
     tech: ['React.js', 'Node.js', 'Express', 'Python', 'PostgreSQL', 'GrokAI'],
-    githubUrl: 'https://github.com/GaouravPatil',
+    githubUrl: 'https://github.com/GaouravPatil/annadata',
     uiType: 'telemetry',
   },
   {
@@ -49,8 +49,25 @@ const PROJECTS_DATA = [
       'Automated audit logs and structured JSON telemetry outputs',
     ],
     tech: ['Python', 'Docker', 'Groq / Mistral', 'Redis', 'GitHub Actions', 'Linux'],
-    githubUrl: 'https://github.com/GaouravPatil',
+    githubUrl: 'https://github.com/GaouravPatil/Nexus',
     uiType: 'pipeline',
+  },
+  {
+    idx: '04',
+    num: '04 / 04',
+    spineTitle: 'Mnemo',
+    kick: 'Memory As a Service [MaaS]',
+    title: 'Mnemo',
+    desc: 'Mnemo is a cloud-native memory layer that allows AI applications to store and retrieve contextual information across multiple sessions and deployments. It provides a simple REST API for storing, retrieving, and deleting key-value pairs, with built-in encryption and access control.',
+    features: [
+      'Model-agnostic memory layer that turns chat history into compact, deduplicated facts',
+      'Replaces stale values (e.g. 30s → 45s timeout) while keeping history queryable',
+      'Ranks by relevance, recency, type priority, and embedding ',
+      '~60–65% token reduction, 45/45 critical facts recalled (author’s own samples)',
+    ],
+    tech: ['Python', 'Docker', 'ArrayList', 'Redis', 'RedisLabs'],
+    githubUrl: 'https://github.com/GaouravPatil/Mnemo',
+    uiType: 'memory',
   },
 ]
 
@@ -210,6 +227,31 @@ export default function Projects() {
                             <div className="mu-code-block">
                               <span style={{ color: '#f59e0b' }}>[DETECTED]</span> Dockerfile layer fail<br />
                               <span style={{ color: '#10b981' }}>[REPAIRED]</span> Cache bust applied (0.4s)
+                            </div>
+                          </div>
+                        )}
+
+                        {proj.uiType === 'Memory' && (
+                          <div className="mu-arch">
+                            <div className="mu-head">
+                              <span className="mu-dot green" />
+                              <span className="mu-dot" />
+                              <span className="mu-dot" />
+                              <span className="mu-title-text">Mnemo</span>
+                            </div>
+                            <div className="mu-box-row">
+                              <div className="mu-box">
+                                <span className="mono">⚡ Memory as a Service</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>Redis</div>
+                              </div>
+                              <div className="mu-box">
+                                <span className="mono">🔄 LLM Optimized</span>
+                                <div style={{ fontSize: 10, color: 'var(--mute)', marginTop: 4 }}>RedisLabs</div>
+                              </div>
+                            </div>
+                            <div className="mu-code-block">
+                              <span style={{ color: '#f59e0b' }}>[DETECTED]</span> Low Token Usage<br />
+                              <span style={{ color: '#10b981' }}>[REPAIRED]</span> Reduce Prompt Size
                             </div>
                           </div>
                         )}

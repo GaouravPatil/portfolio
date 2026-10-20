@@ -12,12 +12,6 @@ const CERTS_DATA = [
     link: 'https://www.credly.com/badges/fc2f6d7a-626d-41f6-b506-d5785bae6f67/public_url',
   },
   {
-    idx: '02',
-    title: 'Master of Computer Applications (MCA) – Pune University',
-    date: '2025 – 2027',
-    link: '#about',
-  },
-  {
     idx: '03',
     title: 'AWS Cloud Solutions & Infrastructure Architecture',
     date: '2025',

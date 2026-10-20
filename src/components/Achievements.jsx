@@ -1,6 +1,6 @@
 const ACHIEVEMENTS_DATA = [
   {
-    idx: '01 / 04',
+    idx: '01 / 05',
     logo: 'RH',
     tint: 'rgba(238, 0, 0, 0.16)',
     label: 'Red Hat Certified',
@@ -10,7 +10,17 @@ const ACHIEVEMENTS_DATA = [
     numLabel: 'Verified',
   },
   {
-    idx: '02 / 04',
+    idx: '02 / 05',
+    logo: 'GCP',
+    tint: 'rgba(16, 185, 129, 0.16)',
+    label: 'Google Cloud Certified',
+    caption: 'Google Cloud Certifed Associate Cloud Engineer',
+    detail: 'Deploying scalable, highly available, and reliable applications on Google Cloud',
+    num: '100%',
+    numLabel: 'Verified',
+  },
+  {
+    idx: '03 / 05',
     logo: 'K8',
     tint: 'rgba(16, 185, 129, 0.16)',
     label: 'AI & Cloud Projects',
@@ -20,7 +30,7 @@ const ACHIEVEMENTS_DATA = [
     numLabel: 'Systems',
   },
   {
-    idx: '03 / 04',
+    idx: '04 / 05',
     logo: 'MCA',
     tint: 'rgba(59, 130, 246, 0.16)',
     label: 'Academic Performance',
@@ -30,7 +40,7 @@ const ACHIEVEMENTS_DATA = [
     numLabel: 'CGPA',
   },
   {
-    idx: '04 / 04',
+    idx: '05 / 05',
     logo: 'SLA',
     tint: 'rgba(245, 158, 11, 0.16)',
     label: 'Architecture Availability',

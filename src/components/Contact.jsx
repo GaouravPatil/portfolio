@@ -97,7 +97,7 @@ export default function Contact() {
             </li>
             <li>
               <a
-                href="https://linkedin.com"
+                href="linkedin.com/in/gaourav-patil-885695272/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
