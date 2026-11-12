@@ -18,7 +18,7 @@ export default function Contact() {
     <section id="contact" className="section ct" aria-labelledby="contact-heading">
       <div className="wrap">
         <p className="sec-tag">
-          <span>06</span>
+          <span>07</span>
           <span aria-hidden="true">—</span>
           <span>Contact</span>
         </p>

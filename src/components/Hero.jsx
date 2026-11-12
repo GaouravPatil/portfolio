@@ -15,7 +15,7 @@ export default function Hero() {
         <div className="hero-copy">
           <p className="mono hero-eyebrow">
             <span className="hero-eyebrow-dot" />
-            Software Engineer Enthusiast <span aria-hidden="true">·</span> Cloud &amp; AI DevOps
+            Software Engineer Enthusiast <span aria-hidden="true">·</span> Cloud, AI &amp; Data
           </p>
 
           <h1 className="hero-h1">
@@ -32,7 +32,7 @@ export default function Hero() {
           <p className="hero-desc">
             RHCSA-certified engineer driven by full-stack systems, cloud-native architecture,
             and AI-driven automation. Building scalable microservices, resilient Kubernetes environments,
-            and intelligent self-healing pipelines.
+            intelligent self-healing pipelines, and data-driven predictive systems.
           </p>
 
           <div className="hero-cta">

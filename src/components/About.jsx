@@ -28,7 +28,8 @@ export default function About() {
           <p className="about-p" style={{ marginTop: '16px' }}>
             From building an AI DevOps Orchestrator for Kubernetes cluster management to architecting
             full-stack agronomic telemetry platforms with GroqAI, I specialize in automating complex systems
-            and shipping clean, enterprise-grade software.
+            and shipping clean, enterprise-grade software. Increasingly, that means applying data science —
+            predictive maintenance, risk scoring, and ML-backed telemetry — to the systems I build.
           </p>
 
           <div className="about-btns">
@@ -170,7 +171,7 @@ export default function About() {
                       <li>Software Engineer Enthusiast &amp; Cloud Specialist</li>
                       <li>RHCSA Certified Red Hat System Administrator</li>
                       <li>Master of Computer Application (MCA), Pune</li>
-                      <li>Projects: AI DevOps Orchestrator &amp; AnnaData</li>
+                      <li>Projects: IndustrialPulse, AnnaData &amp; Guardrail</li>
                       <li>Stack: Python, Go, React, Kubernetes, AWS, Docker</li>
                     </ul>
                     <p className="idc-sign">Gaourav Patil</p>
@@ -202,7 +203,7 @@ export default function About() {
             </div>
             <div className="about-row">
               <dt>Interests</dt>
-              <dd>Cloud, K8s, AI Orchestration, Microservices</dd>
+              <dd>Cloud, K8s, AI Orchestration, Data Science</dd>
             </div>
             <div className="about-row">
               <dt>Status</dt>

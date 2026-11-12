@@ -9,6 +9,7 @@ export default function Navbar({ mobileOpen, setMobileOpen }) {
     { label: 'About', href: '#about', id: 'about' },
     { label: 'Skills', href: '#skills', id: 'skills' },
     { label: 'Work', href: '#work', id: 'work' },
+    { label: 'Data', href: '#data', id: 'data' },
     { label: 'Certifications', href: '#certifications', id: 'certifications' },
     { label: 'Honours', href: '#achievements', id: 'achievements' },
     { label: 'Contact', href: '#contact', id: 'contact' },
@@ -24,7 +25,7 @@ export default function Navbar({ mobileOpen, setMobileOpen }) {
       setScrolled(totalScroll > 50)
 
       // Active section calculation
-      const sections = ['about', 'skills', 'work', 'certifications', 'achievements', 'contact']
+      const sections = ['about', 'skills', 'work', 'data', 'certifications', 'achievements', 'contact']
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i])
         if (el) {

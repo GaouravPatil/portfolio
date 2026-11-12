@@ -10,7 +10,7 @@ const SKILLS_DATA = [
     catLabel: 'Languages',
     proficiency: 'Core / Advanced',
     desc: 'Primary language for AI orchestration, backend APIs, microservices, and automated scripting.',
-    usedIn: ['AI DevOps Orchestrator', 'AnnaData Platform', 'Automation Scripts'],
+    usedIn: ['AI DevOps Orchestrator', 'AnnaData Platform', 'IndustrialPulse ML Pipeline'],
   },
   {
     id: '02',
@@ -174,7 +174,7 @@ const SKILLS_DATA = [
     catLabel: 'Frameworks',
     proficiency: 'Modern Python APIs',
     desc: 'Asynchronous REST APIs, Pydantic data schemas, dependency injection, and auto OpenAPI docs.',
-    usedIn: ['AI DevOps Orchestrator', 'Microservice Backends'],
+    usedIn: ['AI DevOps Orchestrator', 'IndustrialPulse API', 'RiskLens Backend'],
   },
   {
     id: '18',
@@ -226,7 +226,7 @@ const SKILLS_DATA = [
     catLabel: 'Databases & Tools',
     proficiency: 'Primary Relational DB',
     desc: 'ACID transactions, relational modeling, complex joins, and indexing strategies.',
-    usedIn: ['AnnaData Platform', 'DevOps Orchestrator DB'],
+    usedIn: ['AnnaData Platform', 'IndustrialPulse Predictions', 'RiskLens Analytics'],
   },
   {
     id: '23',
@@ -288,6 +288,78 @@ const SKILLS_DATA = [
     desc: 'Automated API endpoint testing, environment mockups, and integration contract validation.',
     usedIn: ['API Verification', 'Team Collaboration'],
   },
+
+  // Data Science
+  {
+    id: '29',
+    sym: 'Pd',
+    name: 'pandas',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'Data Wrangling',
+    desc: 'Data cleaning, joins, time-series resampling, rolling windows, and feature preparation.',
+    usedIn: ['IndustrialPulse RUL Pipeline', 'EDA Notebooks'],
+  },
+  {
+    id: '30',
+    sym: 'Np',
+    name: 'NumPy',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'Numerical Computing',
+    desc: 'Vectorized array operations, statistics, and performance-focused numerical pipelines.',
+    usedIn: ['Feature Engineering', 'Model Evaluation'],
+  },
+  {
+    id: '31',
+    sym: 'Sk',
+    name: 'scikit-learn',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'Machine Learning',
+    desc: 'Random Forests, model selection, leakage-safe pipelines, and regression metrics.',
+    usedIn: ['IndustrialPulse RF Model', 'Predictive Maintenance'],
+  },
+  {
+    id: '32',
+    sym: 'Jp',
+    name: 'Jupyter',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'Reproducible Analysis',
+    desc: 'Executed exploratory notebooks that document data understanding, EDA, and experiments.',
+    usedIn: ['IndustrialPulse Notebooks', 'Risk Analytics'],
+  },
+  {
+    id: '33',
+    sym: 'Mp',
+    name: 'Matplotlib / Seaborn',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'Statistical Visualization',
+    desc: 'Distribution plots, residual analysis, feature importance, and correlation heatmaps.',
+    usedIn: ['Model Evaluation Reports', 'EDA Visuals'],
+  },
+  {
+    id: '34',
+    sym: 'Pl',
+    name: 'Plotly & Streamlit',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'ML Dashboards',
+    desc: 'Interactive model dashboards, fleet overviews, and paginated prediction history.',
+    usedIn: ['IndustrialPulse Dashboard', 'RiskLens Analytics'],
+  },
+  {
+    id: '35',
+    sym: 'Ml',
+    name: 'Predictive Modeling',
+    category: 'data',
+    catLabel: 'Data Science',
+    proficiency: 'Applied ML',
+    desc: 'Leakage-safe feature engineering, regression evaluation, and maintenance-band decisions.',
+    usedIn: ['IndustrialPulse', 'Risk Scoring'],
+  },
 ]
 
 export default function Skills() {
@@ -300,6 +372,7 @@ export default function Skills() {
     { key: 'cloud', label: 'Cloud & DevOps', count: SKILLS_DATA.filter((s) => s.category === 'cloud').length },
     { key: 'frameworks', label: 'Frameworks', count: SKILLS_DATA.filter((s) => s.category === 'frameworks').length },
     { key: 'databases', label: 'Databases & Tools', count: SKILLS_DATA.filter((s) => s.category === 'databases').length },
+    { key: 'data', label: 'Data Science', count: SKILLS_DATA.filter((s) => s.category === 'data').length },
   ]
 
   const filteredSkills = activeFilter === 'all'

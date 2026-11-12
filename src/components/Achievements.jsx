@@ -21,13 +21,13 @@ const ACHIEVEMENTS_DATA = [
   },
   {
     idx: '03 / 05',
-    logo: 'K8',
+    logo: 'ML',
     tint: 'rgba(16, 185, 129, 0.16)',
-    label: 'AI & Cloud Projects',
-    caption: 'Engineered full-scale distributed microservices',
-    detail: 'Kubernetes orchestration, GrokAI telemetry & self-healing automation engines',
-    num: '3+',
-    numLabel: 'Systems',
+    label: 'Predictive Maintenance ML',
+    caption: 'IndustrialPulse RUL model on NASA C-MAPSS FD001',
+    detail: 'Random Forest · 119 features · 24 tests · FastAPI + PostgreSQL serving',
+    num: '0.8645',
+    numLabel: 'Test R²',
   },
   {
     idx: '04 / 05',
@@ -58,7 +58,7 @@ export default function Achievements() {
         <div className="wrap ach-head">
           <header>
             <p className="sec-tag">
-              <span>05</span>
+              <span>06</span>
               <span aria-hidden="true">—</span>
               <span>Honours &amp; metrics</span>
             </p>

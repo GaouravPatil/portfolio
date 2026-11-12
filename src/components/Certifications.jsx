@@ -38,7 +38,7 @@ export default function Certifications() {
         <div className="certs-left">
           <header>
             <p className="sec-tag">
-              <span>04</span>
+              <span>05</span>
               <span aria-hidden="true">—</span>
               <span>Certifications &amp; Education</span>
             </p>
